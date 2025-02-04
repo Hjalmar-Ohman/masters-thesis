@@ -2,7 +2,7 @@ import json
 from pdf2image import convert_from_path
 
 # Import your common utilities (including encode_image_to_base64, call_gpt_4)
-from common_utils import encode_image_to_base64, call_gpt_4
+from prototype.common_utils import encode_image_to_base64, call_gpt_4
 
 def generate_qa_for_pdf(pdf_path):
     """
