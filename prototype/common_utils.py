@@ -155,6 +155,8 @@ def call_gpt_4(user_prompt, system_prompt = ""):
         }
     ]
 
+    print(user_prompt)
+
     response = openai_client.chat.completions.create(
         model="gpt-4o-mini",  # Replace with your actual GPT-4 model name if needed
         messages=messages,
@@ -162,11 +164,3 @@ def call_gpt_4(user_prompt, system_prompt = ""):
         temperature=0.7
     )
     return response.choices[0].message.content
-
-if __name__ == "__main__":
-    PDF_FILE = "knowledge/catsanddogs.pdf"
-    images_base64 = extract_figures_from_pdf(PDF_FILE)
-
-    decoded_bytes = base64.b64decode(images_base64[0])
-    with open("decoded_image.png", "wb") as f:
-        f.write(decoded_bytes)

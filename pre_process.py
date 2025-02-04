@@ -1,34 +1,63 @@
-# PDF processing imports:
-from PyPDF2 import PdfReader
-from pdf2image import convert_from_path
+import io
+from PIL import Image
+import fitz  # PyMuPDF
 
-from rag import BaseRAG
+def extract_figures_from_pdf(pdf_path: str):
+    """
+    Extracts embedded images (figures) from a PDF file and returns a list of PIL images.
 
-def process_pdf(pdf_path: str, rag_pipeline: BaseRAG):
+    Args:
+        pdf_path (str): The path to the PDF file.
+
+    Returns:
+        List[PIL.Image.Image]: A list of PIL image objects.
     """
-    Process a PDF file:
-     - Extract text from each page with PyPDF2 and add to the RAG pipeline.
-     - Extract page images using pdf2image and add them.
+    pil_images = []
+    
+    # Open the PDF with PyMuPDF
+    doc = fitz.open(pdf_path)
+    
+    # Iterate over pages in the PDF
+    for page_index in range(len(doc)):
+        page = doc[page_index]
+        # Get the list of images on this page
+        image_list = page.get_images(full=True)
+        
+        if not image_list:
+            continue
+        
+        for img in image_list:
+            xref = img[0]  # Get the image reference ID
+            base_image = doc.extract_image(xref)  # Extract the image data
+            image_bytes = base_image["image"]
+            
+            # Open the image with Pillow
+            pil_image = Image.open(io.BytesIO(image_bytes))
+            
+            # Convert to RGB if needed
+            if pil_image.mode != "RGB":
+                pil_image = pil_image.convert("RGB")
+            
+            pil_images.append(pil_image)
+    
+    doc.close()
+    return pil_images
+
+def extract_text_from_pdf(pdf_path: str):
     """
-    # --- Extract text ---
-    print(f"Processing PDF text from: {pdf_path}")
+    Extracts text from each page of a PDF file using PyPDF2.
+
+    Args:
+        pdf_path (str): The path to the PDF file.
+
+    Returns:
+        List[dict]: A list of dictionaries containing page text and page number.
+    """
+    from PyPDF2 import PdfReader
     reader = PdfReader(pdf_path)
-    num_pages = len(reader.pages)
-    for i in range(num_pages):
-        page = reader.pages[i]
+    texts = []
+    for i, page in enumerate(reader.pages):
         text = page.extract_text()
         if text and text.strip():
-            rag_pipeline.add_text(text.strip(), extra_metadata={"page_number": i+1})
-    print(f"Extracted text from {num_pages} pages.")
-
-    # --- Extract images (one image per page in this example) ---
-    print("Converting PDF pages to images...")
-    try:
-        images = convert_from_path(pdf_path)
-    except Exception as e:
-        print("Error during PDF image conversion:", e)
-        images = []
-
-    for j, image in enumerate(images):
-        rag_pipeline.add_image(image, extra_metadata={"page_number": j+1})
-    print(f"Processed {len(images)} page images.")
+            texts.append({"text": text.strip(), "page_number": i + 1})
+    return texts

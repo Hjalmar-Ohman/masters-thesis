@@ -26,9 +26,18 @@ def generate_qa_for_pdf(pdf_path):
 
         # Prompt GPT-4. For example, ask it for 10 Q&A pairs:
         messages = [
+            {
+                "role": "system",
+                "content": "Only generate question and answer pairs based on the content of this image. Output 10 pairs. Nothing else."
+            },
+            {
+                "role": "user",
+                "content": [
                     {"type": "text", "text": "Generate 10 question and answer pairs based on the content of this page."},
                     {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64_str}"}}
                 ]
+            }
+        ]
 
         response_text = call_gpt_4(messages)
 
