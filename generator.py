@@ -10,7 +10,7 @@ from openai import OpenAI
 class BaseGenerator(ABC):
     """Abstract generator interface."""
     @abstractmethod
-    def generate(self, user_prompt: str, system_prompt: str) -> str:
+    def generate(self, user_prompt: str, system_prompt: str = "") -> str:
         pass
 
 
@@ -24,7 +24,7 @@ class GPTGenerator(BaseGenerator):
         self.openai_client = OpenAI(api_key=api_key)
 
 
-    def generate(self, user_prompt: str, system_prompt: str) -> str:
+    def generate(self, user_prompt: str, system_prompt: str = "") -> str:
         messages = [
             {
                 "role": "system",
