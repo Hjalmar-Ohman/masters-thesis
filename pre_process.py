@@ -1,6 +1,7 @@
 import io
 from PIL import Image
 import fitz  # PyMuPDF
+from PyPDF2 import PdfReader
 
 def extract_figures_from_pdf(pdf_path: str):
     """
@@ -43,21 +44,60 @@ def extract_figures_from_pdf(pdf_path: str):
     doc.close()
     return pil_images
 
-def extract_text_from_pdf(pdf_path: str):
+def _chunk_text(text: str, chunk_size: int = 200, overlap: int = 50):
     """
-    Extracts text from each page of a PDF file using PyPDF2.
+    Splits the text into overlapping chunks of `chunk_size` words.
+    Overlap helps with contexts that run across boundaries.
+
+    Args:
+        text (str): The full text to split.
+        chunk_size (int): Number of words per chunk.
+        overlap (int): Number of words to overlap between consecutive chunks.
+
+    Yields:
+        str: A chunk of text.
+    """
+    words = text.split()
+    start = 0
+    while start < len(words):
+        end = start + chunk_size
+        chunk = words[start:end]
+        yield " ".join(chunk)
+        start += (chunk_size - overlap)
+
+
+def extract_text_from_pdf(pdf_path: str, chunk_size: int = 200, overlap: int = 50):
+    """
+    Extracts text from each page of a PDF file and then splits it into chunks.
 
     Args:
         pdf_path (str): The path to the PDF file.
+        chunk_size (int): Number of words per chunk.
+        overlap (int): Overlap in words between consecutive chunks.
 
     Returns:
-        List[dict]: A list of dictionaries containing page text and page number.
+        List[dict]: A list of dictionaries containing:
+                    - 'text': the chunk text
+                    - 'page_number': the page number
+                    - 'chunk_index': which chunk in that page
     """
-    from PyPDF2 import PdfReader
     reader = PdfReader(pdf_path)
     texts = []
+
     for i, page in enumerate(reader.pages):
-        text = page.extract_text()
-        if text and text.strip():
-            texts.append({"text": text.strip(), "page_number": i + 1})
+        page_text = page.extract_text()
+        if not page_text or not page_text.strip():
+            continue
+
+        page_text = page_text.strip()
+        # Chunk this page's text
+        chunk_counter = 0
+        for chunk in _chunk_text(page_text, chunk_size=chunk_size, overlap=overlap):
+            texts.append({
+                "text": chunk,
+                "page_number": i + 1,
+                "chunk_index": chunk_counter
+            })
+            chunk_counter += 1
+
     return texts
