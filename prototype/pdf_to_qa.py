@@ -2,7 +2,7 @@ import json
 from pdf2image import convert_from_path
 
 # Import your common utilities (including encode_image_to_base64, call_gpt_4)
-from prototype.common_utils import encode_image_to_base64, call_gpt_4
+from common_utils import encode_image_to_base64, call_gpt_4
 
 def generate_qa_for_pdf(pdf_path):
     """
@@ -17,7 +17,9 @@ def generate_qa_for_pdf(pdf_path):
     output_json = "QA_" + pdf_path.split('/')[-1].replace('.pdf', '.json')
 
     # 1. Convert PDF pages to images
-    pages = convert_from_path(PDF_FILE, dpi=200, poppler_path=r'poppler-24.08.0\Library\bin')
+    # pages = convert_from_path(PDF_FILE, dpi=200, poppler_path=r'../poppler-24.08.0/Library/bin')
+    pages = convert_from_path(PDF_FILE, dpi=200, poppler_path='/opt/homebrew/bin')
+
 
     # 2. Process each page, one at a time
     for i, page_image in enumerate(pages, start=1):
@@ -57,5 +59,5 @@ def generate_qa_for_pdf(pdf_path):
         print(f"Appended results for page {i} to {output_json}")
 
 if __name__ == "__main__":
-    PDF_FILE = "knowledge/subset_monetary_policy_report.pdf"
+    PDF_FILE = "../knowledge/subset_monetary_policy_report.pdf"
     generate_qa_for_pdf(pdf_path=PDF_FILE)
