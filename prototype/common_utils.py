@@ -11,16 +11,20 @@ from PIL import Image
 
 from openai import OpenAI
 from transformers import CLIPProcessor, CLIPModel
+from config import OPENAI_API_KEY
+
 
 # =========================
 # 1. GLOBAL SETUP
 # =========================
 
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"  # If needed, but watch for potential miscalculations.
+# os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"  # If needed, but watch for potential miscalculations.
+os.environ["OMP_NUM_THREADS"] = "1" # This is to avoid conflicts with Faiss (for MAC users)
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Initialize OpenAI client
-openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+openai_client = OpenAI(api_key=OPENAI_API_KEY)
 model_id = "openai/clip-vit-base-patch32"
 
 # Load CLIP model/processor

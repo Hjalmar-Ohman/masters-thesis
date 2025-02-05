@@ -1,2 +1,4 @@
 venv/
 .env
+.python-version
+prototype/__pycache__/common_utils.cpython-313.pyc
