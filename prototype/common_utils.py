@@ -159,7 +159,7 @@ def call_gpt_4(user_prompt, system_prompt = ""):
         }
     ]
 
-    print(user_prompt)
+    #print(user_prompt)
 
     response = openai_client.chat.completions.create(
         model="gpt-4o-mini",  # Replace with your actual GPT-4 model name if needed
