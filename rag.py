@@ -78,25 +78,39 @@ class BaseRAG:
 
     def generate_answer(self, query: str, retrieved_items: list):
         """
-        Generate an answer based on the query and the retrieved content.
-        
-        This method constructs a prompt that includes the query and the content
-        from retrieved items (text or image) and passes it to the generator.
-        
-        Args:
-            query (str): The user query.
-            retrieved_items (list): A list of metadata dictionaries for the retrieved content.
-        
-        Returns:
-            str: The generated answer from the language model.
+        Build a list of content blocks that includes the user's query
+        plus each retrieved text/image snippet in a structured way.
+        Then call self.generator.generate_blocks().
         """
-        prompt = f"Answer the following question: {query}\n\n"
+        blocks = []
+
+        # 1) Add the user query as a text block
+        blocks.append({
+            "type": "text",
+            "text": f"Answer the following question: {query}"
+        })
+
+        # 2) Add each retrieved item as either a text block or an image block
         for item in retrieved_items:
             if item["type"] == "text":
-                prompt += f"Text snippet (page {item.get('page_number', '?')}): {item['content']}\n\n"
+                snippet_text = f"Text snippet (page {item.get('page_number', '?')}): {item['content']}"
+                blocks.append({"type": "text", "text": snippet_text})
+
             elif item["type"] in ("image", "image_summary"):
-                prompt += f"Image content: {item['content']}\n\n"
-        return self.generator.generate(prompt)
+                # For an image with base64 data
+                # If you are calling Gemini, you can do:
+                blocks.append({
+                    "type": "image",        # or "type": "image_url" if your model wants that
+                    "mime_type": "image/png",
+                    "data": item["content"] # e.g. base64 of the original image
+                })
+                # If you also want to display the summary text, you can add another text block:
+                if item["type"] == "image_summary":
+                    blocks.append({"type": "text", "text": f"Summary: {item['content']}"})
+        
+        # 3) Pass blocks to the generator
+        return self.generator.generate_blocks(blocks)
+
 
     def answer_query(self, query: str, top_k: int = 3):
         """
