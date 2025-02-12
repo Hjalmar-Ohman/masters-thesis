@@ -1,0 +1,18 @@
+[
+    {
+        "user_input": "What was the total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023, and how does it compare to Sweden's annual GDP?",
+        "retrieved_contexts": ["The type of financing on which they have to pay interest is called interest-bearing debt and amounted to just over SEK 5,500 billion at the end of 2023."
+        ], 
+        "response": "The total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023 was just over SEK 5,500 billion, which is equivalent to just under Sweden's annual GDP.",
+        "reference": "The total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023 was just over SEK 5,500 billion, which is equivalent to just under Sweden's annual GDP."
+    },
+    {
+        "user_input": "How have the financial assets of Swedish non-financial companies evolved between 2018 and 2023?",
+        "retrieved_contexts":[
+            "/extracted_data/page_1_image_1.png"
+
+        ],
+        "response": "The financial assets of Swedish non-financial companies have generally increased between 2018 and 2023, reaching approximately 4,000–5,000 SEK billion in 2023. Deposits and trade credits & advances make up the largest share of assets, with loans and other financial instruments contributing smaller portions. The growth trend suggests a steady accumulation of financial resources over the years, with minor fluctuations in recent periods.",
+        "reference": "The financial assets of Swedish non-financial companies have generally increased between 2018 and 2023, reaching approximately 4,000–5,000 SEK billion in 2023. Deposits and trade credits & advances make up the largest share of assets, with loans and other financial instruments contributing smaller portions. The growth trend suggests a steady accumulation of financial resources over the years, with minor fluctuations in recent periods."
+    }
+]
