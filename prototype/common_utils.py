@@ -163,41 +163,29 @@ def extract_rasterized_images_from_pdf(pdf_path, output_folder="extracted_data",
     doc.close()
     return image_paths
 
-def embed_texts(texts, processor, model):
+def generate_image_summary(image):
     """
-    Given a list of text strings, return their CLIP embeddings as a NumPy array.
+    Given a PIL image, this function:
+      1. Converts the image to a base64 string.
+      2. Prepares a message payload that sends the image to GPT-4 along with a prompt requesting a detailed summary.
+      3. Returns the generated summary text.
+    
+    Note: This function assumes that your `call_gpt_4` helper can handle both image and text parts.
     """
-    inputs = processor(
-        text=texts,
-        padding=True,
-        truncation=True,
-        return_tensors="pt"
-    ).to(device)
-
-    with torch.no_grad():
-        text_embeddings = model.get_text_features(**inputs)
-
-    # Normalize embeddings
-    text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
-    return text_embeddings.cpu().numpy()
-
-
-def embed_images(images, processor, model):
-    """
-    Given a list of PIL images, return their CLIP embeddings as a NumPy array.
-    """
-    inputs = processor(
-        images=images,
-        return_tensors="pt"
-    ).to(device)
-
-    with torch.no_grad():
-        image_embeddings = model.get_image_features(**inputs)
-
-    # Normalize embeddings
-    image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True)
-    return image_embeddings.cpu().numpy()
-
+    base64_str = encode_image_to_base64(image)
+    # Build a message payload that includes the image (as a data URL) and the prompt.
+    content = [
+        {
+            "type": "image_url",
+            "image_url": {"url": f"data:image/png;base64,{base64_str}"}
+        },
+        {
+            "type": "text",
+            "text": "Please provide a detailed summary of the above image."
+        }
+    ]
+    summary = call_gpt_4(content)
+    return summary.strip()
 
 def search_index(index, query_embedding, top_k=5):
     """
