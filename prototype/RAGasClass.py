@@ -3,16 +3,13 @@ import numpy as np
 import faiss
 from PyPDF2 import PdfReader
 from openai import OpenAI
-from transformers import CLIPProcessor, CLIPModel
-from common_utils import embed_texts, embed_images, encode_image_to_base64, search_index, retrieve_context, call_gpt_4, extract_figures_from_pdf
+from common_utils import encode_image_to_base64, search_index, retrieve_context, call_gpt_4, extract_rasterized_images_from_pdf
+from multimodalembedder import create_embedder
 
 class RAG:
-    def __init__(self, openai_api_key):
+    def __init__(self, openai_api_key, embedder_name="CLIP"):
         self.openai_client = OpenAI(api_key=openai_api_key)
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model_id = "openai/clip-vit-base-patch32"
-        self.clip_model = CLIPModel.from_pretrained(self.model_id).to(self.device)
-        self.clip_processor = CLIPProcessor.from_pretrained(self.model_id)
+        self.embedder = create_embedder(model_name=embedder_name)
         self.index = None
         self.all_metadata = []
         self.all_embeddings = []
@@ -35,7 +32,7 @@ class RAG:
                                 chunk_text = " ".join(tokens[j:j+77])
                                 text_data.append({"text": chunk_text, "chunk_number": f"{i + 1}-{j // 77 + 1}"})
                     
-                    all_images = extract_figures_from_pdf(doc)
+                    all_images = extract_rasterized_images_from_pdf(doc)
                     for i, pil_img in enumerate(all_images):
                         image_data.append({"image": pil_img, "image_number": i + 1})
                 else:
@@ -51,14 +48,14 @@ class RAG:
         
         texts_list = [td["text"] for td in text_data]
         if texts_list:
-            text_embeddings = embed_texts(texts_list, self.clip_processor, self.clip_model)
+            text_embeddings = self.embedder.embed_texts(texts_list)
             for i, emb in enumerate(text_embeddings):
                 self.all_metadata.append({"type": "text", "content": text_data[i]["text"], "chunk_number": text_data[i]["chunk_number"]})
                 self.all_embeddings.append(emb)
         
         pil_images_list = [id_["image"] for id_ in image_data]
         if pil_images_list:
-            image_embeddings = embed_images(pil_images_list, self.clip_processor, self.clip_model)
+            image_embeddings = self.embedder.embed_images(pil_images_list)
             for i, emb in enumerate(image_embeddings):
                 base64_str = encode_image_to_base64(image_data[i]["image"])
                 self.all_metadata.append({"type": "image", "content": base64_str, "image_number": image_data[i]["image_number"]})
@@ -73,7 +70,7 @@ class RAG:
         self.index.add(self.all_embeddings)
     
     def get_most_relevant_docs(self, user_query, top_k=1):
-        query_emb = embed_texts([user_query], self.clip_processor, self.clip_model)
+        query_emb = self.embedder.embed_texts([user_query])
         distances, faiss_indices = search_index(self.index, query_emb, top_k=top_k)
         return retrieve_context(faiss_indices, self.all_metadata)
     
