@@ -17,9 +17,7 @@ def generate_qa_for_pdf(pdf_path):
     output_json = "QA_" + pdf_path.split('/')[-1].replace('.pdf', '.json')
 
     # 1. Convert PDF pages to images
-    # pages = convert_from_path(PDF_FILE, dpi=200, poppler_path=r'../poppler-24.08.0/Library/bin')
-    pages = convert_from_path(PDF_FILE, dpi=200, poppler_path='/opt/homebrew/bin')
-
+    pages = convert_from_path(PDF_FILE, dpi=200, poppler_path=r'poppler-24.08.0/Library/bin')
 
     # 2. Process each page, one at a time
     for i, page_image in enumerate(pages, start=1):
@@ -28,7 +26,7 @@ def generate_qa_for_pdf(pdf_path):
 
         # Prompt GPT-4. For example, ask it for 10 Q&A pairs:
         user_prompt = [
-                            {"type": "text", "text": "Generate 10 question and answer pairs based on the content of this page."},
+                            {"type": "text", "text": "Generate 10 question and answer pairs based on the content of this page in JSON format. NOTHING ELSE"},
                             {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64_str}"}}
                         ]
 
@@ -50,5 +48,5 @@ def generate_qa_for_pdf(pdf_path):
         print(f"Appended results for page {i} to {output_json}")
 
 if __name__ == "__main__":
-    PDF_FILE = "../knowledge/subset_monetary_policy_report.pdf"
+    PDF_FILE = "knowledge/subset_monetary_policy_report.pdf"
     generate_qa_for_pdf(pdf_path=PDF_FILE)

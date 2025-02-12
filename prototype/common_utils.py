@@ -144,9 +144,15 @@ def retrieve_context(indices, metadata):
     return retrieved
 
 
-def call_gpt_4(user_prompt, system_prompt = ""):
+def call_gpt_4(user_prompt, system_prompt: str = ""):
     """
-    Calls GPT-4 (or GPT-4-like) with a list of message dicts. 
+    Calls GPT-4 (or GPT-4-like) with a list of message dicts.
+
+    Example usage:
+    user_prompt = [
+                    {"type": "text", "text": "Generate 10 question and answer pairs based on the content of this page."},
+                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64_str}"}}
+                ]
     """
     messages = [
         {
@@ -158,8 +164,6 @@ def call_gpt_4(user_prompt, system_prompt = ""):
             "content": user_prompt
         }
     ]
-
-    #print(user_prompt)
 
     response = openai_client.chat.completions.create(
         model="gpt-4o-mini",  # Replace with your actual GPT-4 model name if needed
