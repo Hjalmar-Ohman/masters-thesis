@@ -1,7 +1,9 @@
 import torch
 from abc import ABC, abstractmethod
-from transformers import FlavaProcessor, FlavaModel, CLIPProcessor, CLIPModel
-#from lavis.models import load_model_and_preprocess
+from transformers import CLIPProcessor, CLIPModel
+from transformers import AutoProcessor, AutoModel #SigLIP
+from transformers import FlavaProcessor, FlavaModel
+from transformers import BlipModel, AutoProcessor
 from PIL import Image
 
 class BaseEmbedder(ABC):
@@ -43,6 +45,88 @@ class ClipEmbedder(BaseEmbedder):
         inputs = self.processor(images=images, return_tensors="pt").to(self.device)
         with torch.no_grad():
             embeddings = self.model.get_image_features(**inputs)
+        return self._l2_normalize(embeddings).cpu().numpy()
+
+class SigLIPEmbedder(BaseEmbedder):
+    """SigLIP-based embedder."""
+
+    def __init__(self, model_id="C:/huggingface_models/siglip/", device=None):
+        super().__init__(device=device)
+        self.model = AutoModel.from_pretrained(model_id).to(self.device)
+        self.processor = AutoProcessor.from_pretrained(model_id)
+
+    def embed_text(self, texts):
+        """
+        Generate text embeddings.
+
+        :param texts: List of text descriptions.
+        :return: NumPy array of text embeddings.
+        """
+        if not isinstance(texts, list):
+            texts = [texts]
+
+        texts = [f"This is a photo of {t}." for t in texts]  # Following SigLIP's recommended prompt template
+
+        inputs = self.processor(text=texts, padding="max_length",  truncation=True, return_tensors="pt").to(self.device)
+        
+        with torch.no_grad():
+            embeddings = self.model.get_text_features(**inputs)  # Get text embeddings
+            
+        return self._l2_normalize(embeddings).cpu().numpy()
+
+    def embed_images(self, images):
+        """
+        Generate image embeddings.
+
+        :param images: List of PIL Image objects.
+        :return: NumPy array of image embeddings.
+        """
+        if not isinstance(images, list):
+            images = [images]
+
+        inputs = self.processor(images=images, truncation=True, return_tensors="pt").to(self.device)
+        
+        with torch.no_grad():
+            embeddings = self.model.get_image_features(**inputs)
+        
+        return self._l2_normalize(embeddings).cpu().numpy()
+
+class BlipEmbedder(BaseEmbedder):
+    """BLIP-based embedder."""
+
+    def __init__(self, model_id="Salesforce/blip-image-captioning-base", device=None):
+        super().__init__(device=device)
+        self.processor = AutoProcessor.from_pretrained(model_id)
+        self.model = BlipModel.from_pretrained(model_id).to(self.device).eval()
+
+    def embed_text(self, texts):
+        """
+        Generate text embeddings using BLIP.
+
+        :param texts: List of text descriptions.
+        :return: NumPy array of text embeddings.
+        """
+        # Preprocess the input text
+        inputs = self.processor(text=texts, padding=True, truncation=True, return_tensors="pt").to(self.device)
+        
+        with torch.no_grad():
+            embeddings = self.model.get_text_features(**inputs)  # Get text embeddings
+
+        return self._l2_normalize(embeddings).cpu().numpy()
+
+    def embed_images(self, images):
+        """
+        Generate image embeddings using BLIP.
+
+        :param images: List of PIL Image objects.
+        :return: NumPy array of image embeddings.
+        """
+        # Preprocess the input image
+        inputs = self.processor(images=images, padding=True, truncation=True, return_tensors="pt").to(self.device)
+        
+        with torch.no_grad():
+            embeddings = self.model.get_image_features(**inputs)  # Get image embeddings
+        
         return self._l2_normalize(embeddings).cpu().numpy()
 
 class FlavaEmbedder(BaseEmbedder):
@@ -104,3 +188,18 @@ class FlavaEmbedder(BaseEmbedder):
         embeddings = self._l2_normalize(embeddings)
 
         return embeddings.cpu().numpy()
+    
+
+def create_embedder(model_name="CLIP", device=None):
+    """Factory function to create an embedder based on model_name."""
+    model_name = model_name.upper()
+    embedders = {
+        "CLIP": ClipEmbedder,
+        "FLAVA": FlavaEmbedder,
+        "SIGLIP": SigLIPEmbedder,
+        "BLIP": BlipEmbedder
+        }
+    if model_name not in embedders:
+        raise ValueError(f"Unsupported model '{model_name}'. Available: {list(embedders.keys())}")
+
+    return embedders[model_name](device=device)
