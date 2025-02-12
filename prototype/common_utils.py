@@ -3,6 +3,7 @@
 import os
 import io
 import base64
+import cv2
 
 import torch
 
@@ -45,7 +46,7 @@ def encode_image_to_base64(pil_image):
     buffer.seek(0)
     return base64.b64encode(buffer.read()).decode("utf-8")
 
-def extract_figures_from_pdf(pdf_path):
+def extract_embedded_images_from_pdf(pdf_path):
     """
     Extracts embedded images (figures) from a PDF file and returns a list of PIL images.
 
@@ -88,6 +89,79 @@ def extract_figures_from_pdf(pdf_path):
     
     doc.close()
     return pil_images
+
+def extract_rasterized_images_from_pdf(pdf_path, output_folder="extracted_data", padding=300, xpadding = 300):
+    """
+    Extracts images from a PDF by rendering each page as an image and detecting image regions.
+
+    Args:
+        pdf_path (str): The path to the PDF file.
+        output_folder (str, optional): The folder where extracted images will be saved. 
+                                       Defaults to "extracted_data".
+        padding (int, optional): Vertical padding (in pixels) added around detected image regions. 
+                                 Defaults to 300.
+        xpadding (int, optional): Horizontal padding (in pixels) added around detected image regions. 
+                                  Defaults to 300.
+
+    Returns:
+        List[dict]: A list of dictionaries containing file paths of the extracted images, 
+                    where each dictionary has the key `"image_path"`.
+    """
+    os.makedirs(output_folder, exist_ok=True)  # Create output folder
+    image_paths = []
+    
+    # Open the PDF document
+    doc = fitz.open(pdf_path)
+    
+    # Loop through all pages in the PDF
+    for page_index in range(len(doc)):
+        page = doc.load_page(page_index)  # Load the page
+        
+        # Rasterize the page to an image
+        pix = page.get_pixmap(dpi=300)  # Convert to image with high DPI
+        full_image_path = os.path.join(output_folder, f"full_page_{page_index + 1}.png")
+        pix.save(full_image_path)
+        
+        # Convert the image to OpenCV format (numpy array)
+        full_image = cv2.imread(full_image_path)
+        
+        # Convert to grayscale
+        gray_image = cv2.cvtColor(full_image, cv2.COLOR_BGR2GRAY)
+        
+        # Threshold to create a binary image (to highlight potential image areas)
+        _, thresh = cv2.threshold(gray_image, 240, 255, cv2.THRESH_BINARY_INV)
+        
+        # Find contours (regions that are "boxes" in the image)
+        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        # Loop through contours and crop the image regions
+        img_index = 0
+        for contour in contours:
+            # Get the bounding box of each contour (x, y, width, height)
+            x, y, w, h = cv2.boundingRect(contour)
+            
+            # Ignore small areas (you can adjust the threshold for min area size)
+            if w > 50 and h > 50:
+                # Add padding to the bounding box
+                x_padded = max(x - padding, 0)  # Ensure x doesn't go below 0
+                y_padded = max(y - padding, 0)  # Ensure y doesn't go below 0
+                w_padded = min(w + 2 * xpadding, full_image.shape[1] - x_padded)  # Ensure width doesn't exceed image
+                h_padded = min(h + 2 * padding, full_image.shape[0] - y_padded)  # Ensure height doesn't exceed image
+                
+                # Crop the image with padding
+                cropped_image = full_image[y_padded:y_padded + h_padded, x_padded:x_padded + w_padded]
+                
+                # Convert cropped image to PIL format to save it as PNG
+                pil_image = Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
+                img_filename = f"page_{page_index + 1}_image_{img_index + 1}.png"
+                img_path = os.path.join(output_folder, img_filename)
+                pil_image.save(img_path, "PNG")
+                
+                image_paths.append({"image_path": img_path})
+                img_index += 1
+    
+    doc.close()
+    return image_paths
 
 def embed_texts(texts, processor, model):
     """
