@@ -22,16 +22,8 @@ from config import OPENAI_API_KEY
 # os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"  # If needed, but watch for potential miscalculations.
 os.environ["OMP_NUM_THREADS"] = "1" # This is to avoid conflicts with Faiss (for MAC users)
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-
 # Initialize OpenAI client
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
-model_id = "openai/clip-vit-base-patch32"
-
-# Load CLIP model/processor
-clip_model = CLIPModel.from_pretrained(model_id).to(device)
-clip_processor = CLIPProcessor.from_pretrained(model_id)
-
 
 # =========================
 # 2. HELPER FUNCTIONS

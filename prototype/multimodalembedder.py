@@ -4,7 +4,11 @@ from transformers import CLIPProcessor, CLIPModel
 from transformers import AutoProcessor, AutoModel #SigLIP
 from transformers import FlavaProcessor, FlavaModel
 from transformers import BlipModel, AutoProcessor
+from openai import OpenAI
 from PIL import Image
+import numpy as np
+
+from config import OPENAI_API_KEY
 
 class BaseEmbedder(ABC):
     """Abstract base class for multimodal embedders."""
@@ -17,7 +21,6 @@ class BaseEmbedder(ABC):
         """Returns a 2D numpy array of text embeddings."""
         pass
 
-    @abstractmethod
     def embed_images(self, images):
         """Returns a 2D numpy array of image embeddings."""
         pass
@@ -188,7 +191,22 @@ class FlavaEmbedder(BaseEmbedder):
         embeddings = self._l2_normalize(embeddings)
 
         return embeddings.cpu().numpy()
-    
+
+class OpenAIEmbedder(BaseEmbedder):
+    """OpenAI text embedder."""
+    def embed_text(self, texts):
+        client = OpenAI(api_key=OPENAI_API_KEY)
+
+        response = client.embeddings.create(
+            input=texts,
+            model="text-embedding-3-small"
+        )
+
+        embeddings = np.array([item.embedding for item in response.data])
+
+        return embeddings
+
+
 
 def create_embedder(model_name="CLIP", device=None):
     """Factory function to create an embedder based on model_name."""
@@ -197,7 +215,8 @@ def create_embedder(model_name="CLIP", device=None):
         "CLIP": ClipEmbedder,
         "FLAVA": FlavaEmbedder,
         "SIGLIP": SigLIPEmbedder,
-        "BLIP": BlipEmbedder
+        "BLIP": BlipEmbedder,
+        "OPENAI": OpenAIEmbedder
         }
     if model_name not in embedders:
         raise ValueError(f"Unsupported model '{model_name}'. Available: {list(embedders.keys())}")
