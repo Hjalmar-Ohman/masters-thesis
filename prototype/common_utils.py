@@ -173,7 +173,7 @@ def generate_image_summary(image):
         },
         {
             "type": "text",
-            "text": "Please provide a detailed summary of the above image."
+            "text": "Provide a summary of the attached image."
         }
     ]
     summary = call_gpt_4(content)
