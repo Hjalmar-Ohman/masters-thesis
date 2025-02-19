@@ -13,7 +13,7 @@ from common_utils import (
     call_gpt_4,
 )
 
-from multimodalembedder import BaseEmbedder, ClipEmbedder
+from prototype.multimodal_embedder import BaseEmbedder, ClipEmbedder
 
 class MultimodalRAG:
     def __init__(self, pdf_file: str, embedder: BaseEmbedder = ClipEmbedder):
