@@ -5,7 +5,6 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"  # Adjust as needed for your environ
 import numpy as np
 import faiss
 
-# Example imports from your utilities
 from common_utils import (
     encode_image_to_base64,
     extract_images_from_pdf,
@@ -139,20 +138,3 @@ class MultimodalRAG:
         gpt_response = "call_gpt_4(user_content)"
 
         return gpt_response
-
-if __name__ == "__main__":
-    # Initialize the RAG pipeline
-    pdf_path = "../knowledge/subset_monetary_policy_report.pdf"
-    rag = MultimodalRAG(pdf_path, embedder_name="CLIP")
-
-    # Example user query
-    user_query = "21 Figure 9. Non-financial companies’ debts SEK billion"
-
-    # 1) Retrieve the most relevant docs
-    relevant_docs = rag.get_most_relevant_docs(user_query, top_k=5)
-
-    # 2) Generate the final answer
-    answer = rag.generate_answer(user_query, relevant_docs)
-
-    print("\nUser Query:", user_query)
-    print("Answer:", answer)
