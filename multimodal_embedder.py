@@ -215,8 +215,9 @@ class ColPaliEmbedder(BaseEmbedder):
         # You can optionally pass device_map="auto" or device_map="cuda:0" etc.
         self.model = ColPali.from_pretrained(
             model_name,
-            torch_dtype=torch.bfloat16,
-            device_map="auto",  # or "cuda:0" or "mps"
+            torch_dtype=torch.float32,  # Use float32 for CPU compatibility
+            device_map="auto",  # Uses the best available device
+            offload_folder="offload_dir",  # Specify an offload directory
         ).eval()
         self.processor = ColPaliProcessor.from_pretrained(model_name)
 
