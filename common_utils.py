@@ -117,7 +117,7 @@ def generate_image_summary(image):
         },
         {
             "type": "text",
-            "text": "Provide a summary of the attached image."
+            "text": "Provide a summary of the attached image and try to extract Title, X-Label, Y-Label, X-Tick, Y-Tick, and Legend"
         }
     ]
     summary = call_gpt_4(content)
