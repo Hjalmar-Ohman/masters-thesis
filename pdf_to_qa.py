@@ -12,6 +12,9 @@ def generate_qa_for_pdf(pdf_path, mode="per_page"):
         pdf_path (str): Path to the PDF file.
         mode (str): "per_page" processes each page as an image,
                     "per_chunk" processes extracted text and images separately.
+
+    Returns:
+        str: Path to the generated JSON file containing the Q&A data.
     """
 
     output_json = "QA_" + os.path.basename(pdf_path).replace('.pdf', '.json')
@@ -77,6 +80,8 @@ def generate_qa_for_pdf(pdf_path, mode="per_page"):
         json.dump(qa_data, f, ensure_ascii=False, indent=4)
 
     print(f"Q&A saved to {output_json} using mode: {mode}")
+    
+    return output_json
 
 if __name__ == "__main__":
     pdf_path = "knowledge/subset_monetary_policy_report.pdf"

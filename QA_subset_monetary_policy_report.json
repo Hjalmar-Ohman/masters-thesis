@@ -2,26 +2,26 @@
     {
         "page_number": 1,
         "question": "What was the total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023, and how was this amount distributed between loans and debt securities?",
-        "answer": "At the end of 2023, the total amount of interest-bearing debt for Swedish non-financial companies was just over SEK 5,500 billion. Of this, SEK 4,000 billion were loans from banks and other lenders, and SEK 1,500 billion were issued debt securities."
+        "answer": "At the end of 2023, the total amount of interest-bearing debt for Swedish non-financial companies was just over SEK 5,500 billion, with SEK 4,000 billion in loans from banks and other lenders and SEK 1,500 billion in issued debt securities."
     },
     {
         "page_number": 2,
-        "question": "What is the primary source of borrowing for large enterprises that are not publicly owned, according to the data provided?",
-        "answer": "Loans from banks and other financial institutions."
+        "question": "What type of companies are included in the borrowing statistics mentioned, and how does their borrowing behavior differ based on size?",
+        "answer": "The borrowing statistics refer to Swedish non-financial companies, including tenant-owner housing associations. The borrowing behavior differs based on size, with large enterprises borrowing more from banks and other financial institutions compared to SMEs (Small and Medium-sized Enterprises) and micro-enterprises."
     },
     {
         "page_number": 3,
-        "question": "What sector primarily dominates securities borrowing among non-financial companies?",
-        "answer": "Property companies dominate securities borrowing among non-financial companies."
+        "question": "Which sector dominates the volume of securities borrowing among non-financial companies, according to the data?",
+        "answer": "Property companies dominate the volume of securities borrowing."
     },
     {
         "page_number": 4,
-        "question": "What percentage of issued corporate debt securities is held by the Riksbank as of December 2023?",
+        "question": "What percentage of issued corporate debt securities was held by the Riksbank at the end of 2023?",
         "answer": "0.4 percent"
     },
     {
         "page_number": 5,
-        "question": "What was the approximate market value of companies' outstanding equities at the end of 2023, and how does this relate to Sweden's GDP?",
-        "answer": "At the end of 2023, the market value of companies' outstanding equities was just over SEK 21,000 billion, which is equivalent to around 340 percent of GDP."
+        "question": "What was the outstanding stock of issued public sector securities in Sweden at the end of 2023, and how is this amount distributed between government bonds and municipal bonds?",
+        "answer": "At the end of 2023, the outstanding stock of issued public sector securities in Sweden amounted to almost SEK 1,200 billion. The majority consisted of government bonds, but around SEK 250 billion consisted of municipal bonds issued by municipalities and regions."
     }
 ]

@@ -94,7 +94,7 @@ class MultimodalRAG:
           3) Store as metadata in self.all_metadata
         """
         # Convert entire pages to images
-        pages = convert_from_path(self.pdf_file, dpi=self.dpi)
+        pages = convert_from_path(self.pdf_file, dpi=self.dpi, poppler_path=r'poppler-24.08.0/Library/bin')
 
         # Embed each page image
         page_embeddings = self.embedder.embed_image(pages)
