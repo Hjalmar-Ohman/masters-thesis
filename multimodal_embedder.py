@@ -9,6 +9,8 @@ from transformers import (
     FlavaProcessor, FlavaModel,
     BlipModel,
 )
+from colpali_engine.models import ColPali, ColPaliProcessor
+
 from sentence_transformers import SentenceTransformer  # Salesforce, Snowflake
 from openai import OpenAI
 
@@ -199,7 +201,66 @@ class FlavaEmbedder(BaseEmbedder):
         cls_embeds = self._l2_normalize(cls_embeds)
         return cls_embeds.cpu().numpy()
 
+class ColPaliEmbedder(BaseEmbedder):
+    """
+    A multimodal embedder that uses ColPali for both text and image embeddings.
+    """
 
+    def __init__(self, model_name="vidore/colpali-v1.3", device=None):
+        """
+        :param model_name: The ColPali model checkpoint on HF Hub, e.g., "vidore/colpali-v1.3"
+        :param device: If None, defaults to "cuda" if available, else "cpu"
+        """
+        super().__init__(device=device)
+        # You can optionally pass device_map="auto" or device_map="cuda:0" etc.
+        self.model = ColPali.from_pretrained(
+            model_name,
+            torch_dtype=torch.bfloat16,
+            device_map="auto",  # or "cuda:0" or "mps"
+        ).eval()
+        self.processor = ColPaliProcessor.from_pretrained(model_name)
+
+    def embed_text(self, texts):
+        """
+        Embeds one or more text queries using ColPali.
+
+        :param texts: str or list of str
+        :return: 2D numpy array of shape (batch_size, embedding_dim)
+        """
+        if not isinstance(texts, list):
+            texts = [texts]
+
+        # Prepare ColPali query inputs
+        query_inputs = self.processor.process_queries(texts).to(self.device)
+
+        with torch.no_grad():
+            # Forward pass -> shape [batch_size, hidden_dim]
+            query_emb = self.model(**query_inputs)
+
+        # L2-normalize for consistency with other embedders
+        query_emb = self._l2_normalize(query_emb)
+        return query_emb.cpu().numpy()
+
+    def embed_image(self, images):
+        """
+        Embeds one or more images using ColPali.
+
+        :param images: PIL Image or list of PIL Images
+        :return: 2D numpy array of shape (batch_size, embedding_dim)
+        """
+        if not isinstance(images, list):
+            images = [images]
+
+        # Process images using the ColPali processor
+        image_inputs = self.processor.process_images(images).to(self.device)
+
+        with torch.no_grad():
+            # Forward pass -> shape [batch_size, hidden_dim]
+            image_emb = self.model(**image_inputs)
+
+        # L2-normalize for consistency with other embedders
+        image_emb = self._l2_normalize(image_emb)
+        return image_emb.cpu().numpy()
 # ----------------------------------------------------------------------
 # 5) Text-only implementations (use BaseTextOnlyEmbedder)
 # ----------------------------------------------------------------------
@@ -263,6 +324,7 @@ def create_embedder(model_name="CLIP", device=None):
         "OPENAI": OpenAIEmbedder,
         "SFR": SFREmbedder,
         "SNOWFLAKE": SnowflakeEmbedder,
+        "COLPALI": ColPaliEmbedder,
     }
 
     if model_name not in embedders:
