@@ -11,14 +11,14 @@ from common_utils import (
     extract_text_from_pdf,
     call_gpt_4,
 )
-from multimodal_embedder import BaseEmbedder, ClipEmbedder
+from multimodal_embedder import BaseEmbedder, SigLIPEmbedder
 
 
 class MultimodalRAG:
     def __init__(
         self,
         pdf_file: str,
-        embedder: BaseEmbedder = ClipEmbedder,
+        embedder: BaseEmbedder = SigLIPEmbedder,
         page_mode: str = "text_and_images",
         dpi: int = 200,
     ):
@@ -119,6 +119,7 @@ class MultimodalRAG:
         embedding_dimension = all_embeddings.shape[1]
 
         self.index = faiss.IndexFlatIP(embedding_dimension)
+        print(f"FAISS Input Embeddings Shape: {all_embeddings.shape}")  # Should be (N, D)
         self.index.add(all_embeddings)
 
     def _search_index(self, query_embedding, top_k=5):
