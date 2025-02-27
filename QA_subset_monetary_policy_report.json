@@ -1,18 +1,18 @@
 [
     {
         "page_number": 1,
-        "question": "What was the total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023, and how was this amount distributed between loans and debt securities?",
-        "answer": "At the end of 2023, the total amount of interest-bearing debt for Swedish non-financial companies was just over SEK 5,500 billion, with SEK 4,000 billion in loans from banks and other lenders and SEK 1,500 billion in issued debt securities."
+        "question": "What was the total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023, and how is this divided between loans from banks and debt securities?",
+        "answer": "The total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023 was just over SEK 5,500 billion, with SEK 4,000 billion in loans from banks and other lenders and SEK 1,500 billion in issued debt securities."
     },
     {
         "page_number": 2,
-        "question": "What type of companies are included in the borrowing statistics mentioned, and how does their borrowing behavior differ based on size?",
-        "answer": "The borrowing statistics refer to Swedish non-financial companies, including tenant-owner housing associations. The borrowing behavior differs based on size, with large enterprises borrowing more from banks and other financial institutions compared to SMEs (Small and Medium-sized Enterprises) and micro-enterprises."
+        "question": "What were the debt levels of large non-publicly owned enterprises compared to small and medium-sized enterprises in SEK billion as of December 2023?",
+        "answer": "Large non-publicly owned enterprises had significantly higher debt levels compared to small and medium-sized enterprises, with large enterprises borrowing around 2,500 SEK billion, while SMEs borrowed less than 1,500 SEK billion combined."
     },
     {
         "page_number": 3,
-        "question": "Which sector dominates the volume of securities borrowing among non-financial companies, according to the data?",
-        "answer": "Property companies dominate the volume of securities borrowing."
+        "question": "What type of companies mainly engage in securities borrowing, and which sectors dominate this borrowing in terms of volume?",
+        "answer": "The highest share of securities borrowing is for companies active in energy and water supply, industrial and property operations, and certain service industries, with property companies dominating securities borrowing in terms of volume."
     },
     {
         "page_number": 4,
@@ -21,7 +21,7 @@
     },
     {
         "page_number": 5,
-        "question": "What was the outstanding stock of issued public sector securities in Sweden at the end of 2023, and how is this amount distributed between government bonds and municipal bonds?",
-        "answer": "At the end of 2023, the outstanding stock of issued public sector securities in Sweden amounted to almost SEK 1,200 billion. The majority consisted of government bonds, but around SEK 250 billion consisted of municipal bonds issued by municipalities and regions."
+        "question": "What types of bonds do the public sector use to fund themselves, and who manages government borrowing in Sweden?",
+        "answer": "The public sector uses government bonds, municipal bonds, treasury bills, and certificates to fund themselves. In Sweden, government borrowing is managed by the Swedish National Debt Office."
     }
 ]
