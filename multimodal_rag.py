@@ -178,6 +178,5 @@ class MultimodalRAG:
                     "image_url": {"url": f"data:image/png;base64,{base64_str}"}
                 })
 
-        # Example GPT-4 call (replace with your actual call):
-        gpt_response = "call_gpt_4(user_content)"
+        gpt_response = call_gpt_4(user_content)
         return gpt_response
