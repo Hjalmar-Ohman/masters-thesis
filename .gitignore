@@ -7,3 +7,4 @@ prototype/extracted_data/
 prototype/QA_subset_monetary_policy_report.json
 LAVIS/
 offload_dir/
+__pycache__/
