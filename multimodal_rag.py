@@ -13,30 +13,30 @@ class MultimodalRAG:
         self,
         pdf_file: str,
         embedder: BaseEmbedder = SigLIPEmbedder,
-        page_mode: str = "text_and_images",
+        pdf_processing_mode: str = "text_and_inline_images",
         dpi: int = 200,
     ):
         """
         :param pdf_file: Path to the PDF file
         :param embedder: Any embedder that implements BaseEmbedder
-        :param page_mode: One of:
-            - "text_and_images": regular approach (extract + embed text chunks + inline images)
-            - "image_only": convert entire pages to images, embed them only
+        :param pdf_processing_mode: One of:
+            - "text_and_inline_images": regular approach (extract + embed text chunks + inline images)
+            - "page_images": convert entire pages to images, embed them only
         :param dpi: Dots per inch for pdf2image
         """
 
         self.pdf_file = pdf_file
         self.embedder = embedder
-        self.page_mode = page_mode.lower()
+        self.pdf_processing_mode = pdf_processing_mode.lower()
         self.dpi = dpi
 
         # Prepare containers for all embeddings and metadata
         self.all_embeddings = []
         self.all_metadata = []
 
-        if self.page_mode == "text_and_images":
+        if self.pdf_processing_mode == "text_and_inline_images":
             self._process_text_and_inline_images()
-        elif self.page_mode == "image_only":
+        elif self.pdf_processing_mode == "page_images":
             self._process_pdf_as_pages()
         else:
             raise ValueError(f"Unsupported page_mode={self.page_mode!r}")
