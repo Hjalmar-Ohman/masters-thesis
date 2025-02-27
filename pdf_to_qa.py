@@ -84,5 +84,5 @@ def generate_qa_for_pdf(pdf_path, mode="per_page"):
     return output_json
 
 if __name__ == "__main__":
-    pdf_path = "knowledge/subset_monetary_policy_report.pdf"
+    pdf_path = "knowledge/subset_riksbanken.pdf"
     generate_qa_for_pdf(pdf_path, mode="per_page")

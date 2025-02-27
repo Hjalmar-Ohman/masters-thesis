@@ -4,7 +4,7 @@ venv/
 prototype/__pycache__/common_utils.cpython-313.pyc
 prototype/__pycache__
 prototype/extracted_data/
-prototype/QA_subset_monetary_policy_report.json
+prototype/QA_subset_riksbanken.json
 LAVIS/
 offload_dir/
 __pycache__/
