@@ -2,7 +2,8 @@ import os
 import json
 from pdf2image import convert_from_path
 
-from common_utils import encode_image_to_base64, extract_text_from_pdf, extract_images_from_pdf, call_gpt_4
+from common_utils import encode_image_to_base64, call_gpt_4
+from pdf_utils import extract_text_from_pdf, extract_images_from_pdf
 
 def generate_qa_for_pdf(pdf_path, mode="per_page"):
     """

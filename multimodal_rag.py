@@ -1,16 +1,10 @@
-import os
 import numpy as np
 import faiss
-from PIL import Image
 from pdf2image import convert_from_path
 
 # Local imports in your project
-from common_utils import (
-    encode_image_to_base64,
-    extract_images_from_pdf,
-    extract_text_from_pdf,
-    call_gpt_4,
-)
+from common_utils import encode_image_to_base64, call_gpt_4
+from pdf_utils import extract_text_from_pdf, extract_images_from_pdf
 from multimodal_embedder import BaseEmbedder, SigLIPEmbedder
 
 
@@ -178,5 +172,5 @@ class MultimodalRAG:
                     "image_url": {"url": f"data:image/png;base64,{base64_str}"}
                 })
 
-        gpt_response = call_gpt_4(user_content)
+        gpt_response = "call_gpt_4(user_content)"
         return gpt_response

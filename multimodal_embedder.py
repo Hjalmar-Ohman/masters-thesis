@@ -9,7 +9,7 @@ from sentence_transformers import SentenceTransformer  # Salesforce
 from openai import OpenAI
 
 from config import OPENAI_API_KEY
-from common_utils import generate_image_summary
+from common_utils import encode_image_to_base64, call_gpt_4
 
 def create_embedder(model_name="CLIP", device=None):
     """
@@ -31,6 +31,28 @@ def create_embedder(model_name="CLIP", device=None):
         )
 
     return embedders[model_name](device=device)
+
+def _generate_image_summary(image):
+    """
+    Args:
+        image (PIL.Image): A PIL image object.
+    Returns:
+        str: A text summary of the image content.
+    """
+    base64_str = encode_image_to_base64(image)
+    # Build a message payload that includes the image (as a data URL) and the prompt.
+    content = [
+        {
+            "type": "image_url",
+            "image_url": {"url": f"data:image/png;base64,{base64_str}"}
+        },
+        {
+            "type": "text",
+            "text": "Provide a summary of the attached image and try to extract Title, X-Label, Y-Label, X-Tick, Y-Tick, and Legend"
+        }
+    ]
+    summary = call_gpt_4(content)
+    return summary.strip()
 
 # ----------------------------------------------------------------------
 # 1) BaseEmbedder: single base class for BOTH text-only and multimodal
@@ -62,7 +84,7 @@ class BaseEmbedder(ABC):
          - Convert each image to a text summary
          - Delegate to self.embed_text() to get embeddings
         """
-        summaries = [generate_image_summary(pil_img) for pil_img in images]
+        summaries = [_generate_image_summary(pil_img) for pil_img in images]
         return self.embed_text(summaries)
 
     def _l2_normalize(self, tensor: torch.Tensor) -> torch.Tensor:

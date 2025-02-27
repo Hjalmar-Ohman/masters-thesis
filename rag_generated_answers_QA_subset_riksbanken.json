@@ -1,6 +1,6 @@
 [
     {
-        "user_input": "What was the total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023, and how is this amount divided between loans from banks and other lenders and issued debt securities?",
+        "query": "What was the total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023, and how is this amount divided between loans from banks and other lenders and issued debt securities?",
         "retrieved_contexts": [
             {
                 "type": "text",
@@ -28,11 +28,11 @@
                 "page_number": 3
             }
         ],
-        "response": "At the end of 2023, the total amount of interest-bearing debt for Swedish non-financial companies was reported to be just over SEK 5,500 billion. This total is divided between loans from banks and other lenders, and issued debt securities. Unfortunately, the exact breakdown between these two categories is not specified in the provided text. However, it is indicated that companies utilize both forms of financing, with larger companies tending to rely on debt securities, while medium-sized and small companies primarily borrow from banks and other lenders. \n\nFor precise figures regarding the division of this debt between loans and debt securities, additional data or figures from the source material would be necessary.",
-        "reference": "At the end of 2023, the total amount of interest-bearing debt for Swedish non-financial companies was just over SEK 5,500 billion. This included SEK 4,000 billion in loans from banks and other lenders and SEK 1,500 billion in issued debt securities."
+        "generated_answer": "At the end of 2023, the total amount of interest-bearing debt for Swedish non-financial companies was just over SEK 5,500 billion. This amount is divided between loans from banks and other lenders, and issued debt securities. However, the specific breakdown of this total debt into the amounts attributed to loans and debt securities is not provided in the excerpts you shared. For detailed figures on the division between loans from banks and other lenders versus issued debt securities, you would typically need to refer to the specific financial reports or statistics published by relevant financial authorities or organizations, such as Statistics Sweden.",
+        "true_answer": "At the end of 2023, the total amount of interest-bearing debt for Swedish non-financial companies was just over SEK 5,500 billion. This included SEK 4,000 billion in loans from banks and other lenders and SEK 1,500 billion in issued debt securities."
     },
     {
-        "user_input": "What are the main sources of borrowing for large non-financial enterprises in Sweden as of December 2023?",
+        "query": "What are the main sources of borrowing for large non-financial enterprises in Sweden as of December 2023?",
         "retrieved_contexts": [
             {
                 "type": "text",
@@ -60,11 +60,11 @@
                 "page_number": 2
             }
         ],
-        "response": "As of December 2023, the main sources of borrowing for large non-financial enterprises in Sweden are primarily bank loans and the issuance of debt securities. The trend indicates that these companies are increasingly turning to securities financing, especially in the context of favorable conditions such as low interest rates, which have made securities issuance more attractive compared to traditional bank loans.\n\n1. **Bank Loans**: Large non-financial enterprises continue to rely on bank loans as a significant source of financing. This includes loans from domestic banks as well as other financial institutions.\n\n2. **Debt Securities**: There has been a notable increase in the issuance of debt securities, particularly among larger firms. This is often preferred due to the lower costs associated with issuing securities in a favorable interest rate environment. The majority of the investment in these securities comes from foreign investors, followed by Swedish funds.\n\n3. **Equity Capital**: Companies also utilize equity capital for financing, with a market value of outstanding equities surpassing SEK 21,000 billion by the end of 2023. This includes both listed and unlisted equities, with a significant portion of investment in listed equities coming from foreign investors.\n\nOverall, while large enterprises benefit from a mix of financing sources, the trend towards securities issuance seems to be growing, particularly in sectors such as energy, water supply, and property operations, where securities borrowing is more prevalent.",
-        "reference": "The main sources of borrowing for large non-financial enterprises in Sweden as of December 2023 are loans from banks and other monetary financial institutions (MFIs) and debt securities."
+        "generated_answer": "As of December 2023, the main sources of borrowing for large non-financial enterprises in Sweden include:\n\n1. **Bank Loans**: Large non-financial companies primarily secure financing through loans from banks and other financial institutions. This traditional source of funding remains significant, especially for companies that seek more stable and predictable financing options.\n\n2. **Debt Securities**: In addition to bank loans, large enterprises are increasingly turning to the issuance of debt securities. This trend has been facilitated by the low interest rates that followed the financial crisis, which made securities financing more attractive compared to bank loans. This method of financing is particularly popular among larger companies in sectors such as energy, water supply, and property operations.\n\n3. **Equity Capital**: Companies also utilize equity capital as a source of financing. By the end of 2023, the total market value of outstanding equities for these companies was around SEK 21,000 billion, which is a significant amount compared to the GDP. This includes both listed and unlisted equities, with foreign investors holding a substantial portion of the listed equities.\n\nOverall, large non-financial enterprises in Sweden leverage a mix of bank loans, debt securities, and equity capital to meet their financing needs for investments and operational activities.",
+        "true_answer": "The main sources of borrowing for large non-financial enterprises in Sweden as of December 2023 are loans from banks and other monetary financial institutions (MFIs) and debt securities."
     },
     {
-        "user_input": "What types of borrowing dominate in the property sector compared to medium-sized and small companies?",
+        "query": "What types of borrowing dominate in the property sector compared to medium-sized and small companies?",
         "retrieved_contexts": [
             {
                 "type": "text",
@@ -92,11 +92,11 @@
                 "page_number": 3
             }
         ],
-        "response": "In the property sector, the dominant form of borrowing is through debt securities, which is significantly higher compared to medium-sized and small companies that primarily rely on bank loans. The text indicates that property companies lead in securities borrowing, especially in comparison to other industries. This trend is influenced by the favorable conditions of low interest rates that followed the financial crisis, which made it more attractive for investors to engage in riskier assets and for companies to finance themselves through securities rather than traditional bank loans.\n\nConversely, medium-sized and small companies typically have a greater reliance on bank loans for their financing needs. This distinction highlights how larger companies, particularly in sectors like property, have more access to diverse financial instruments such as debt securities, while smaller firms often face limitations and thus turn to traditional lending sources.",
-        "reference": "Property companies mainly dominate securities borrowing, while medium-sized and small companies mainly take out loans."
+        "generated_answer": "In the property sector, borrowing primarily occurs through the issuance of debt securities, which has become a significant source of financing. This trend is largely influenced by the favorable conditions created by low interest rates following the financial crisis, which have encouraged investors to seek riskier assets, such as those in the property sector. Consequently, property companies are notable for their dominance in securities borrowing compared to medium-sized and small companies.\n\nIn contrast, medium-sized and small companies typically rely more heavily on traditional bank loans for their financing needs. This reliance on bank loans indicates a preference for more straightforward and possibly lower-cost borrowing options, as opposed to the securities market, which may be less accessible for smaller firms.\n\nOverall, while the property sector leans more towards securities for financing, medium-sized and small companies primarily utilize bank loans, reflecting different financial strategies and access to capital markets based on their size and operational needs.",
+        "true_answer": "Property companies mainly dominate securities borrowing, while medium-sized and small companies mainly take out loans."
     },
     {
-        "user_input": "What percentage of issued corporate debt securities is owned by the Riksbank as of the end of 2023?",
+        "query": "What percentage of issued corporate debt securities is owned by the Riksbank as of the end of 2023?",
         "retrieved_contexts": [
             {
                 "type": "text",
@@ -124,11 +124,11 @@
                 "page_number": 2
             }
         ],
-        "response": "The text provided does not specify the exact percentage of issued corporate debt securities owned by the Riksbank as of the end of 2023. To find this information, you may need to refer directly to the specific report or data source that discusses the Riksbank's holdings of corporate debt securities. If you have access to such a report, you might find the percentage on a specific page or section related to the Riksbank's monetary policy or asset purchases.",
-        "reference": "0.4 percent"
+        "generated_answer": "The provided text does not specify the exact percentage of issued corporate debt securities owned by the Riksbank as of the end of 2023. To find this information, you may need to refer to the relevant financial reports or publications from the Riksbank or other authoritative financial sources that detail their holdings in corporate debt securities.",
+        "true_answer": "0.4 percent"
     },
     {
-        "user_input": "What was the outstanding stock of issued public sector securities in Sweden at the end of 2023?",
+        "query": "What was the outstanding stock of issued public sector securities in Sweden at the end of 2023?",
         "retrieved_contexts": [
             {
                 "type": "text",
@@ -156,7 +156,7 @@
                 "page_number": 3
             }
         ],
-        "response": "The outstanding stock of issued public sector securities in Sweden at the end of 2023 is not explicitly mentioned in the provided text. However, the document discusses various aspects of the financial landscape, including the market value of companies’ outstanding equities and the financing needs of non-financial companies. To find the specific figure for public sector securities, you may need to refer to official financial reports or statistics from relevant Swedish financial authorities or institutions.",
-        "reference": "Almost SEK 1,200 billion."
+        "generated_answer": "The outstanding stock of issued public sector securities in Sweden at the end of 2023 is not directly mentioned in the provided text. However, it is indicated that there is significant activity in the financial markets involving debt securities, particularly from non-financial companies and the influence of foreign investors. To find the specific amount of public sector securities, you may need to refer to official financial reports or statistics from Swedish financial authorities or institutions like Statistics Sweden.",
+        "true_answer": "Almost SEK 1,200 billion."
     }
 ]
