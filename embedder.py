@@ -1,12 +1,12 @@
-import os
 import torch
 import numpy as np
 from abc import ABC, abstractmethod
 
-from transformers import AutoProcessor, AutoModel  # SigLIP
-from colpali_engine.models import ColPali, ColPaliProcessor, ColQwen2_5, ColQwen2_5_Processor
-from sentence_transformers import SentenceTransformer  # Salesforce
+from transformers import AutoProcessor, AutoModel, AutoTokenizer
+from colpali_engine.models import ColPali, ColPaliProcessor
+from sentence_transformers import SentenceTransformer
 from openai import OpenAI
+import torch.nn.functional as F
 
 from config import OPENAI_API_KEY
 
@@ -49,6 +49,67 @@ class TextEmbedder(ABC):
 # ----------------------------------------------------------------------
 # 2) Multimodal embedders
 # ----------------------------------------------------------------------
+class ColPaliEmbedder(MultimodalEmbedder):
+    """
+    ColPali multimodal embedder.
+    """
+    def __init__(self, model_name="vidore/colpali-v1.3", device=None):
+        super().__init__(device=device)
+        self.model = ColPali.from_pretrained(model_name, torch_dtype=torch.float32).eval()
+        self.processor = ColPaliProcessor.from_pretrained(model_name)
+
+    def embed_text(self, texts):
+        query_inputs = self.processor.process_queries(texts).to(self.device)
+        with torch.no_grad():
+            query_emb = self.model(**query_inputs)
+        return self._l2_normalize(query_emb).cpu().numpy()
+
+    def embed_image(self, images):
+        image_inputs = self.processor.process_images(images).to(self.device)
+        with torch.no_grad():
+            image_emb = self.model(**image_inputs)
+        return self._l2_normalize(image_emb).cpu().numpy()
+
+class VisRAGEmbedder(MultimodalEmbedder):
+    """VisRAG multimodal embedder."""
+    def __init__(self, model_name="openbmb/VisRAG-Ret", device=None):
+        super().__init__(device=device)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+        self.model = AutoModel.from_pretrained(model_name, torch_dtype=torch.bfloat16, trust_remote_code=True).to(self.device).eval()
+
+    def _weighted_mean_pooling(self, hidden, attention_mask):
+        attention_mask_ = attention_mask * attention_mask.cumsum(dim=1)
+        s = torch.sum(hidden * attention_mask_.unsqueeze(-1).float(), dim=1)
+        d = attention_mask_.sum(dim=1, keepdim=True).float()
+        return s / d
+
+    def encode(self, text_or_image_list):
+        if isinstance(text_or_image_list[0], str):
+            inputs = {
+                "text": text_or_image_list,
+                "image": [None] * len(text_or_image_list),
+                "tokenizer": self.tokenizer
+            }
+        else:
+            inputs = {
+                "text": [''] * len(text_or_image_list),
+                "image": text_or_image_list,
+                "tokenizer": self.tokenizer
+            }
+        
+        outputs = self.model(**inputs)
+        attention_mask = outputs.attention_mask
+        hidden = outputs.last_hidden_state
+        reps = self._weighted_mean_pooling(hidden, attention_mask)
+        embeddings = F.normalize(reps, p=2, dim=1).detach().cpu().numpy()
+        return embeddings
+
+    def embed_text(self, texts):
+        return self.encode(["Represent this query for retrieving relevant documents: " + t for t in texts])
+
+    def embed_image(self, images):
+        return self.encode(images)
+
 class SigLIPEmbedder(MultimodalEmbedder):
     """
     SigLIP multimodal embedder.
@@ -71,72 +132,6 @@ class SigLIPEmbedder(MultimodalEmbedder):
             image_emb = self.model.get_image_features(**inputs)
         return self._l2_normalize(image_emb).cpu().numpy()
 
-class ColPaliEmbedder(MultimodalEmbedder):
-    """
-    ColPali multimodal embedder.
-    """
-    def __init__(self, model_name="vidore/colpali-v1.3", device=None):
-        super().__init__(device=device)
-        self.model = ColPali.from_pretrained(model_name, torch_dtype=torch.float32).eval()
-        self.processor = ColPaliProcessor.from_pretrained(model_name)
-
-    def embed_text(self, texts):
-        query_inputs = self.processor.process_queries(texts).to(self.device)
-        with torch.no_grad():
-            query_emb = self.model(**query_inputs)
-        return self._l2_normalize(query_emb).cpu().numpy()
-
-    def embed_image(self, images):
-        image_inputs = self.processor.process_images(images).to(self.device)
-        with torch.no_grad():
-            image_emb = self.model(**image_inputs)
-        return self._l2_normalize(image_emb).cpu().numpy()
-
-
-class ColQwenEmbedder(MultimodalEmbedder):
-    """
-    ColQwen2.5-3b multimodal embedder.
-    Crashing on laptop CPU.
-    """
-
-    def __init__(self, model_name="Metric-AI/colqwen2.5-3b-multilingual", device=None):
-        super().__init__(device=device)
-
-        self.model = ColQwen2_5.from_pretrained(
-            model_name,
-            torch_dtype=torch.float32,  # bfloat16 may not be supported on CPU
-        ).eval()
-
-
-        # Load the ColQwen2.5 processor
-        self.processor = ColQwen2_5_Processor.from_pretrained(model_name)
-
-    def embed_text(self, texts):
-        query_inputs = self.processor.process_queries(texts).to(self.device)
-        with torch.no_grad():
-            query_emb = self.model(**query_inputs)
-
-        # L2-normalize along last dimension
-        query_emb = self._l2_normalize(query_emb)
-        query_emb = query_emb.cpu().numpy()
-
-        print(f"Text Embeddings Shape: {query_emb.shape}")  # Should be (N, D)
-
-        return query_emb
-
-    def embed_image(self, images):
-        image_inputs = self.processor.process_images(images).to(self.device)
-        with torch.no_grad():
-            image_emb = self.model(**image_inputs)
-
-
-        image_emb = self._l2_normalize(image_emb)
-        image_emb = image_emb.cpu().numpy()
-
-        print(f"Image Embeddings Shape: {image_emb.shape}")  # Should be (N, D)
-
-        return image_emb
-    
 # ----------------------------------------------------------------------
 # 3) Text-only embedders
 # ----------------------------------------------------------------------
