@@ -29,9 +29,6 @@ class MultimodalEmbedder(ABC):
     def embed_image(self, images):
         pass
 
-    def _l2_normalize(self, tensor: torch.Tensor) -> torch.Tensor:
-        return tensor / tensor.norm(dim=-1, keepdim=True)
-
 class TextEmbedder(ABC):
     """
     Abstract base class for text-only embedders.
@@ -43,8 +40,8 @@ class TextEmbedder(ABC):
     def embed_text(self, texts):
         pass
 
-    def _l2_normalize(self, tensor: torch.Tensor) -> torch.Tensor:
-        return tensor / tensor.norm(dim=-1, keepdim=True)
+def _l2_normalize(self, tensor: torch.Tensor) -> torch.Tensor:
+    return tensor / tensor.norm(dim=-1, keepdim=True)
 
 # ----------------------------------------------------------------------
 # 2) Multimodal embedders
@@ -62,13 +59,13 @@ class ColPaliEmbedder(MultimodalEmbedder):
         query_inputs = self.processor.process_queries(texts).to(self.device)
         with torch.no_grad():
             query_emb = self.model(**query_inputs)
-        return self._l2_normalize(query_emb).cpu().numpy()
+        return _l2_normalize(query_emb).cpu().numpy()
 
     def embed_image(self, images):
         image_inputs = self.processor.process_images(images).to(self.device)
         with torch.no_grad():
             image_emb = self.model(**image_inputs)
-        return self._l2_normalize(image_emb).cpu().numpy()
+        return _l2_normalize(image_emb).cpu().numpy()
 
 class VisRAGEmbedder(MultimodalEmbedder):
     """VisRAG multimodal embedder."""
@@ -124,13 +121,13 @@ class SigLIPEmbedder(MultimodalEmbedder):
         inputs = self.processor(text=texts, padding=True, truncation=True, return_tensors="pt").to(self.device)
         with torch.no_grad():
             text_emb = self.model.get_text_features(**inputs)
-        return self._l2_normalize(text_emb).cpu().numpy()
+        return _l2_normalize(text_emb).cpu().numpy()
 
     def embed_image(self, images):
         inputs = self.processor(images=images, return_tensors="pt").to(self.device)
         with torch.no_grad():
             image_emb = self.model.get_image_features(**inputs)
-        return self._l2_normalize(image_emb).cpu().numpy()
+        return _l2_normalize(image_emb).cpu().numpy()
 
 # ----------------------------------------------------------------------
 # 3) Text-only embedders
