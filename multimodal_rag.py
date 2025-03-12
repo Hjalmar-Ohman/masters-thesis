@@ -17,25 +17,13 @@ class MultimodalRAG:
             processor.process_pdf(pdf_file)
 
     def get_most_relevant_docs(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
-        """
-        1. For each document processor, use its embedder and FAISS index to search for the most relevant documents.
-        2. Combine results from all processors.
-        3. Sort the results by distance (score) in descending order.
-        4. Return only the top_k overall.
-        """
         all_results = []
-        # Query each processor’s FAISS index directly
         for processor in self.processors:
-            # Embed the query using the processor's embedder
-            query_emb = processor.embedder.embed_text([query]).astype("float32")
-            distances, indices = processor.index.search(query_emb, top_k)
-            for dist, idx in zip(distances[0], indices[0]):
-                # Copy the metadata and add the distance score
-                item = processor.metadata[idx].copy()
-                item["distance"] = float(dist)
-                all_results.append(item)
-        # Sort the aggregated results and return only the top_k overall
-        sorted_results = sorted(all_results, key=lambda x: x["distance"], reverse=True)
+            results = processor.search(query, top_k=top_k)
+            all_results.extend(results)
+
+        sorted_results = sorted(all_results, key=lambda x: x["distance"], reverse=False)  # Lower is better
+
         return sorted_results[:top_k]
 
     def generate_answer(self, query: str, relevant_docs: List[Dict[str, Any]]) -> str:

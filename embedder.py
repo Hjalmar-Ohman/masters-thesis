@@ -20,6 +20,7 @@ class MultimodalEmbedder(ABC):
     """
     def __init__(self, device=None):
         self.device = device if device else ("cuda" if torch.cuda.is_available() else "cpu")
+        self.has_custom_search = False
 
     @abstractmethod
     def embed_text(self, texts):
@@ -35,11 +36,12 @@ class TextEmbedder(ABC):
     """
     def __init__(self, device=None):
         self.device = device if device else ("cuda" if torch.cuda.is_available() else "cpu")
+        self.has_custom_search = False
 
     @abstractmethod
     def embed_text(self, texts):
         pass
-
+    
 def _l2_normalize(self, tensor: torch.Tensor) -> torch.Tensor:
     return tensor / tensor.norm(dim=-1, keepdim=True)
 
@@ -54,6 +56,7 @@ class ColPaliEmbedder(MultimodalEmbedder):
         super().__init__(device=device)
         self.model = ColPali.from_pretrained(model_name, torch_dtype=torch.float32).eval()
         self.processor = ColPaliProcessor.from_pretrained(model_name)
+        self.has_custom_search = True
 
     def embed_text(self, texts):
         query_inputs = self.processor.process_queries(texts).to(self.device)
@@ -66,6 +69,43 @@ class ColPaliEmbedder(MultimodalEmbedder):
         with torch.no_grad():
             image_emb = self.model(**image_inputs)
         return _l2_normalize(image_emb).cpu().numpy()
+
+    def search(
+        self,
+        query: str,
+        candidate_embeddings: np.ndarray,   # shape: (N, d)
+        candidate_metadata: list,
+        top_k: int = 5
+    ) -> list:
+        """
+        Use ColPali's score_multi_vector for single-vector doc embeddings.
+        """
+        # 1) Get query embedding from text
+        q = self.embed_text([query])  # shape: (1, d)
+        
+        # 2) Convert to torch and reshape
+        q_torch = torch.from_numpy(q)  # shape (1, d)
+        qs_tensor = q_torch.unsqueeze(0)  # shape (1, 1, d) if you want to pass a single 3D Tensor
+
+        docs_torch = torch.from_numpy(candidate_embeddings)  # shape (N, d)
+        ps_tensor = docs_torch.unsqueeze(1)                  # shape (N, 1, d)
+        
+        # 3) Score
+        scores = self.processor.score_multi_vector(qs_tensor, ps_tensor)  # shape (1, N)
+        scores = scores[0]  # shape (N,)
+
+        # Transform scores to match FAISS logic (lower is better)
+        scores = -scores  # Option 1: Make scores negative
+        # scores = 1 - scores  # Option 2: Normalize (TODO: check if scores range [0,1])
+
+        # 4) Sort, pick top_k, build output
+        top_indices = scores.argsort(descending=True)[:top_k]
+        results = []
+        for idx in top_indices:
+            item = candidate_metadata[idx].copy()
+            item["distance"] = float(scores[idx].item())
+            results.append(item)
+        return results
 
 class VisRAGEmbedder(MultimodalEmbedder):
     """VisRAG multimodal embedder."""
