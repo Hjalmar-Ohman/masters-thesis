@@ -12,7 +12,7 @@ from embedder import MultimodalEmbedder, TextEmbedder
 class DocumentProcessor(abc.ABC):
     def __init__(self, embedder):
         self.embedder = embedder
-        self.index = None
+        self.faiss_index = None
         self.embeddings = None
         self.metadata: List[Dict[str, Any]] = []
 
@@ -22,9 +22,24 @@ class DocumentProcessor(abc.ABC):
 
     def build_faiss_index(self):
         embedding_dim = self.embeddings.shape[1]
-        self.index = faiss.IndexFlatIP(embedding_dim)
-        self.index.add(self.embeddings)
+        self.faiss_index = faiss.IndexFlatIP(embedding_dim)
+        self.faiss_index.add(self.embeddings)
 
+    def search(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
+        if self.embedder.has_custom_search:
+            return self.embedder.search(query, self.embeddings, self.metadata, top_k)
+        else:
+            # Use FAISS
+            query_emb = self.embedder.embed_text([query]).astype("float32")  # shape: (1, d)
+            distances, indices = self.faiss_index.search(query_emb, top_k)
+            
+            results = []
+            for dist, idx in zip(distances[0], indices[0]):
+                item = self.metadata[idx].copy()
+                item["distance"] = float(dist)
+                results.append(item)
+            return results
+        
 class TextProcessor(DocumentProcessor):
     def __init__(self, embedder: TextEmbedder):
         super().__init__(embedder)
@@ -35,7 +50,8 @@ class TextProcessor(DocumentProcessor):
         
         self.metadata = [{"type": "text", "content": td["text"], "page_number": td["page_number"]} for td in text_data]
         self.embeddings = self.embedder.embed_text(texts_list).astype("float32")
-        self.build_faiss_index()
+        if not self.embedder.has_custom_search:
+            self.build_faiss_index()
 
 class ImageProcessor(DocumentProcessor):
     def __init__(self, embedder: MultimodalEmbedder):
@@ -47,7 +63,8 @@ class ImageProcessor(DocumentProcessor):
         
         self.metadata = [{"type": "image", "content": encode_image_to_base64(info["pil_image"]), "page_number": info["page_number"]} for info in image_data]
         self.embeddings = self.embedder.embed_image(pil_images_list).astype("float32")
-        self.build_faiss_index()
+        if not self.embedder.has_custom_search:
+            self.build_faiss_index()
 
 class PageImageProcessor(DocumentProcessor):
     def __init__(self, embedder: MultimodalEmbedder, dpi=200):
@@ -59,7 +76,8 @@ class PageImageProcessor(DocumentProcessor):
 
         self.metadata = [{"type": "page_image", "content": encode_image_to_base64(page_img), "page_number": i + 1} for i, page_img in enumerate(pages)]
         self.embeddings = self.embedder.embed_image(pages).astype("float32")
-        self.build_faiss_index()
+        if not self.embedder.has_custom_search:
+            self.build_faiss_index()
 
 class TextAndInlineImageProcessor(DocumentProcessor):
     def __init__(self, embedder: TextEmbedder):
@@ -90,4 +108,5 @@ class TextAndInlineImageProcessor(DocumentProcessor):
         for i, img_info in enumerate(image_data):
             self.metadata.append({"type": "image", "content": base64_images_list[i], "page_number": img_info["page_number"]})
 
-        self.build_faiss_index()
+        if not self.embedder.has_custom_search:
+            self.build_faiss_index()
