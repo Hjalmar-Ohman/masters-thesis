@@ -111,7 +111,7 @@ class SigLIPEmbedder(MultimodalEmbedder):
     """
     SigLIP multimodal embedder.
     """
-    def __init__(self, model_id="C:/huggingface_models/siglip/", device=None):
+    def __init__(self, model_id="google/siglip-base-patch16-224", device=None):
         super().__init__(device=device)
         self.model = AutoModel.from_pretrained(model_id, local_files_only=True).to(self.device).eval()
         self.processor = AutoProcessor.from_pretrained(model_id, local_files_only=True)
