@@ -138,7 +138,6 @@ PyPDF2==3.0.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2025.1
-pywin32==308
 pyxnat==1.6.2
 PyYAML==6.0.2
 pyzmq==26.2.0
@@ -188,3 +187,6 @@ xxhash==3.5.0
 yarl==1.18.3
 zipp==3.21.0
 zstandard==0.23.0
+# Windows only dependency
+pywin32==308; sys_platform == 'win32'
+fpdf2==2.0.0
