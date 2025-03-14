@@ -164,24 +164,24 @@ def extract_images_from_pdf3(pdf_path: str) -> List[Dict[str, any]]:
     doc.close()
     return images
 
-# if __name__ == "__main__":
-#     # Extract text from a PDF
-#     pdfpath = "knowledge/subset_ChartQA_Evaluation_Set.pdf"
-#     # pdfpath = "knowledge/catsanddogs.pdf"
-#     text_data = extract_text_from_pdf(pdfpath)
-#     print(f"Extracted text from PDF: {text_data}")
+if __name__ == "__main__":
+    # Extract text from a PDF
+    pdfpath = "knowledge/subset_ChartQA_Evaluation_Set.pdf"
+    # pdfpath = "knowledge/catsanddogs.pdf"
+    text_data = extract_text_from_pdf(pdfpath)
+    print(f"Extracted text from PDF: {text_data}")
     
-#     # Extract images from a PDF using the second function
-#     image_data = extract_images_from_pdf3(pdfpath)
+    # Extract images from a PDF using the second function
+    image_data = extract_images_from_pdf3(pdfpath)
     
-#     # Debugging output: Check if we have image data
-#     if image_data:
-#         print(f"Extracted {len(image_data)} images from the PDF.")
-#     else:
-#         print("No images found.")
+    # Debugging output: Check if we have image data
+    if image_data:
+        print(f"Extracted {len(image_data)} images from the PDF.")
+    else:
+        print("No images found.")
     
-#     # Save extracted images
-#     for i, image_info in enumerate(image_data):
-#         # Save the image
-#         image_info["pil_image"].save(f"extracted_image_page_{image_info['page_number']}_{i}.png")
-#         print(f"Saved image from page {image_info['page_number']} as extracted_image_page_{image_info['page_number']}_{i}.png")
+    # Save extracted images
+    for i, image_info in enumerate(image_data):
+        # Save the image
+        image_info["pil_image"].save(f"extracted_image_page_{image_info['page_number']}_{i}.png")
+        print(f"Saved image from page {image_info['page_number']} as extracted_image_page_{image_info['page_number']}_{i}.png")
