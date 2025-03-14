@@ -69,7 +69,7 @@ class ColPaliEmbedder(MultimodalEmbedder):
         scores = self.processor.score_multi_vector(query_embedding, candidate_embeddings)
         
         # Get top-k scores and their indices
-        top_scores, top_indices = torch.topk(scores, k=top_k, dim=-1)  # Ensure it's in the correct dimension
+        top_scores, top_indices = torch.topk(scores, k=top_k, dim=-1)
 
         return top_scores, top_indices
 
