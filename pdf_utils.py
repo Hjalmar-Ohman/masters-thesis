@@ -1,10 +1,18 @@
+import os
+from pdf2image import convert_from_path
+
 import cv2
 import numpy as np
 from typing import List, Dict
+import base64
+from io import BytesIO
 
 from PyPDF2 import PdfReader
 import fitz  # PyMuPDF
 from PIL import Image
+
+
+from unstructured.partition.pdf import partition_pdf
 
 def extract_text_from_pdf(pdf_path: str) -> List[Dict[str, any]]:
     """
@@ -86,3 +94,94 @@ def extract_images_from_pdf(pdf_path: str, padding: int = 300, xpadding: int = 3
 
     doc.close()
     return pil_images
+
+
+def extract_images_from_pdf2(pdf_path: str) -> List[Dict[str, any]]:
+    """
+    Extracts images from a PDF using the unstructured library.
+    Alternative for no 1, but does not work too well on chartQA dataset.
+    Requires poppler and tesseract to be installed.
+
+    Args:
+        pdf_path (str): The path to the PDF file.
+
+    Returns:
+        List[Dict[str, any]]: A list of dictionaries where each dictionary contains:
+            - "pil_image" (PIL.Image): Extracted image as a PIL object.
+            - "page_number" (int): The page number where the image was extracted.
+    """
+    # Extract images from PDF
+    chunks = partition_pdf(
+        filename=pdf_path,
+        infer_table_structure=False,          # No need to extract tables
+        strategy="hi_res",                   # High-resolution extraction
+        extract_image_block_types=["Image"],  # Extract only images
+        extract_image_block_to_payload=True   # Get images as base64
+    )
+    
+    # Process extracted chunks
+    images = []
+    for chunk in chunks:
+        if chunk.metadata.image_base64:  # Ensure it has an image
+            image_data = base64.b64decode(chunk.metadata.image_base64)
+            image = Image.open(BytesIO(image_data))
+            images.append({
+                "pil_image": image,
+                "page_number": chunk.metadata.page_number
+            })
+    
+    return images
+
+def extract_images_from_pdf3(pdf_path: str) -> List[Dict[str, any]]:
+    """
+    Extracts images from a PDF by screenshotting the entire PDF page.
+    Assumes there is only one image per PDF page.
+
+    Args:
+        pdf_path (str): The path to the PDF file.
+
+    Returns:
+        List[Dict[str, any]]: A list of dictionaries where each dictionary contains:
+            - "pil_image" (PIL.Image): Extracted image as a PIL object.
+            - "page_number" (int): The page number where the image was extracted.
+    """
+    images = []
+    doc = fitz.open(pdf_path)
+
+    for page_index in range(len(doc)):
+        page = doc.load_page(page_index)
+        pix = page.get_pixmap(dpi=300)  # Render the page at 300 DPI (high resolution)
+        
+        # Convert to a PIL Image
+        pil_image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+
+        # Append the image and its page number to the list
+        images.append({
+            "pil_image": pil_image,
+            "page_number": page_index + 1  # 1-based page number
+        })
+
+    doc.close()
+    return images
+
+# if __name__ == "__main__":
+#     # Extract text from a PDF
+#     pdfpath = "knowledge/subset_ChartQA_Evaluation_Set.pdf"
+#     # pdfpath = "knowledge/catsanddogs.pdf"
+#     text_data = extract_text_from_pdf(pdfpath)
+#     print(f"Extracted text from PDF: {text_data}")
+    
+#     # Extract images from a PDF using the second function
+#     image_data = extract_images_from_pdf3(pdfpath)
+    
+#     # Debugging output: Check if we have image data
+#     if image_data:
+#         print(f"Extracted {len(image_data)} images from the PDF.")
+#     else:
+#         print("No images found.")
+    
+#     # Save extracted images
+#     for i, image_info in enumerate(image_data):
+#         # Save the image
+#         image_info["pil_image"].save(f"extracted_image_page_{image_info['page_number']}_{i}.png")
+#         print(f"Saved image from page {image_info['page_number']} as extracted_image_page_{image_info['page_number']}_{i}.png")
