@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 from transformers import AutoProcessor, AutoModel, AutoTokenizer
 from colpali_engine.models import ColPali, ColPaliProcessor
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, util
 from openai import OpenAI
 import torch.nn.functional as F
 
@@ -52,7 +52,7 @@ class ColPaliEmbedder(MultimodalEmbedder):
     """
     def __init__(self, model_name="vidore/colpali-v1.3", device=None):
         super().__init__(device=device)
-        self.model = ColPali.from_pretrained(model_name, torch_dtype=torch.float32).eval()
+        self.model = ColPali.from_pretrained(model_name, torch_dtype=torch.bfloat16).to(self.device).eval()
         self.processor = ColPaliProcessor.from_pretrained(model_name)
 
     def embed_text(self, texts):
@@ -139,12 +139,3 @@ class OpenAIEmbedder(TextEmbedder):
         response = client.embeddings.create(input=texts, model="text-embedding-3-small")
         embeddings = np.array([item.embedding for item in response.data])
         return embeddings
-
-class SFREmbedder(TextEmbedder):
-    """Salesforce SFR-Embedding text embedder."""
-    def __init__(self, model_name="Salesforce/SFR-Embedding-Mistral", device=None):
-        super().__init__(device=device)
-        self.model = SentenceTransformer(model_name, device=self.device)
-
-    def embed_text(self, texts):
-        return self.model.encode(texts, normalize_embeddings=True)
