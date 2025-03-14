@@ -104,46 +104,6 @@ class ColPaliEmbedder(MultimodalEmbedder):
             results.append(item)
         return results
 
-class VisRAGEmbedder(MultimodalEmbedder):
-    """VisRAG multimodal embedder."""
-    def __init__(self, model_name="openbmb/VisRAG-Ret", device=None):
-        super().__init__(device=device)
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-        self.model = AutoModel.from_pretrained(model_name, torch_dtype=torch.bfloat16, trust_remote_code=True).to(self.device).eval()
-
-    def _weighted_mean_pooling(self, hidden, attention_mask):
-        attention_mask_ = attention_mask * attention_mask.cumsum(dim=1)
-        s = torch.sum(hidden * attention_mask_.unsqueeze(-1).float(), dim=1)
-        d = attention_mask_.sum(dim=1, keepdim=True).float()
-        return s / d
-
-    def encode(self, text_or_image_list):
-        if isinstance(text_or_image_list[0], str):
-            inputs = {
-                "text": text_or_image_list,
-                "image": [None] * len(text_or_image_list),
-                "tokenizer": self.tokenizer
-            }
-        else:
-            inputs = {
-                "text": [''] * len(text_or_image_list),
-                "image": text_or_image_list,
-                "tokenizer": self.tokenizer
-            }
-        
-        outputs = self.model(**inputs)
-        attention_mask = outputs.attention_mask
-        hidden = outputs.last_hidden_state
-        reps = self._weighted_mean_pooling(hidden, attention_mask)
-        embeddings = F.normalize(reps, p=2, dim=1).detach().cpu().numpy()
-        return embeddings
-
-    def embed_text(self, texts):
-        return self.encode(["Represent this query for retrieving relevant documents: " + t for t in texts])
-
-    def embed_image(self, images):
-        return self.encode(images)
-
 # ----------------------------------------------------------------------
 # 3) Text-only embedders
 # ----------------------------------------------------------------------
@@ -154,3 +114,6 @@ class OpenAIEmbedder(TextEmbedder):
         response = client.embeddings.create(input=texts, model="text-embedding-3-small")
         embeddings = np.array([item.embedding for item in response.data])
         return embeddings
+
+if __name__ == "__main__":
+    pass
