@@ -22,7 +22,7 @@ class MultimodalRAG:
             results = processor.search(query, top_k=top_k)
             all_results.extend(results)
 
-        sorted_results = sorted(all_results, key=lambda x: x["distance"], reverse=False)  # Lower is better
+        sorted_results = sorted(all_results, key=lambda x: x["distance"], reverse=False)
 
         return sorted_results[:top_k]
 

@@ -27,18 +27,17 @@ class DocumentProcessor(abc.ABC):
 
     def search(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         if self.embedder.has_custom_search:
-            return self.embedder.search(query, self.embeddings, self.metadata, top_k)
+            distances, indices = self.embedder.search(query, self.embeddings, top_k)
         else:
-            # Use FAISS
             query_emb = self.embedder.embed_text([query]).astype("float32")  # shape: (1, d)
             distances, indices = self.faiss_index.search(query_emb, top_k)
             
-            results = []
-            for dist, idx in zip(distances[0], indices[0]):
-                item = self.metadata[idx].copy()
-                item["distance"] = float(dist)
-                results.append(item)
-            return results
+        results = []
+        for dist, idx in zip(distances[0], indices[0]):
+            item = self.metadata[idx].copy()
+            item["distance"] = float(dist)
+            results.append(item)
+        return results
         
 class TextProcessor(DocumentProcessor):
     def __init__(self, embedder: TextEmbedder):

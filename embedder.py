@@ -46,9 +46,6 @@ class TextEmbedder(ABC):
 # 2) Multimodal embedders
 # ----------------------------------------------------------------------
 class ColPaliEmbedder(MultimodalEmbedder):
-    """
-    ColPali multimodal embedder.
-    """
     def __init__(self, model_name="vidore/colpali-v1.3", device=None):
         super().__init__(device=device)
         self.model = ColPali.from_pretrained(model_name, torch_dtype=torch.bfloat16).to(self.device).eval()
@@ -67,42 +64,14 @@ class ColPaliEmbedder(MultimodalEmbedder):
             image_emb = self.model(**image_inputs)
         return image_emb
 
-    def search(
-        self,
-        query: str,
-        candidate_embeddings: np.ndarray,   # shape: (N, d)
-        candidate_metadata: list,
-        top_k: int = 5
-    ) -> list:
-        """
-        Use ColPali's score_multi_vector for single-vector doc embeddings.
-        """
-        # 1) Get query embedding from text
-        q = self.embed_text([query])  # shape: (1, d)
+    def search(self, query, candidate_embeddings, top_k=5):
+        query_embedding = self.embed_text([query])
+        scores = self.processor.score_multi_vector(query_embedding, candidate_embeddings)
         
-        # 2) Convert to torch and reshape
-        q_torch = torch.from_numpy(q)  # shape (1, d)
-        qs_tensor = q_torch.unsqueeze(0)  # shape (1, 1, d) if you want to pass a single 3D Tensor
+        # Get top-k scores and their indices
+        top_scores, top_indices = torch.topk(scores, k=top_k, dim=-1)  # Ensure it's in the correct dimension
 
-        docs_torch = torch.from_numpy(candidate_embeddings)  # shape (N, d)
-        ps_tensor = docs_torch.unsqueeze(1)                  # shape (N, 1, d)
-        
-        # 3) Score
-        scores = self.processor.score_multi_vector(qs_tensor, ps_tensor)  # shape (1, N)
-        scores = scores[0]  # shape (N,)
-
-        # Transform scores to match FAISS logic (lower is better)
-        scores = -scores  # Option 1: Make scores negative
-        # scores = 1 - scores  # Option 2: Normalize (TODO: check if scores range [0,1])
-
-        # 4) Sort, pick top_k, build output
-        top_indices = scores.argsort(descending=True)[:top_k]
-        results = []
-        for idx in top_indices:
-            item = candidate_metadata[idx].copy()
-            item["distance"] = float(scores[idx].item())
-            results.append(item)
-        return results
+        return top_scores, top_indices
 
 # ----------------------------------------------------------------------
 # 3) Text-only embedders
@@ -114,6 +83,3 @@ class OpenAIEmbedder(TextEmbedder):
         response = client.embeddings.create(input=texts, model="text-embedding-3-small")
         embeddings = np.array([item.embedding for item in response.data])
         return embeddings
-
-if __name__ == "__main__":
-    pass
