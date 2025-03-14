@@ -22,6 +22,22 @@ def compute_mrr_at_k(
 
     return sum(reciprocal_ranks) / len(reciprocal_ranks) if reciprocal_ranks else 0.0
 
+def compute_recall_at_k(
+    all_retrieved_pages: List[List[int]], 
+    all_real_pages: List[int], 
+    k: int
+) -> float:
+    hits = 0
+
+    for retrieved_pages, real_page in zip(all_retrieved_pages, all_real_pages):
+        # Consider only the top-k retrieved pages
+        top_k_pages = retrieved_pages[:k]
+
+        if real_page in top_k_pages:
+            hits += 1
+
+    return hits / len(all_real_pages) if all_real_pages else 0.0
+
 def evaluate_generation(rag_answers: List[dict], evaluator_llm):
     formatted_answers = [
         {
