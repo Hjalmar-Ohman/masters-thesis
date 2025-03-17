@@ -133,7 +133,7 @@ def extract_images_from_pdf(pdf_path: str, padding: int = 300, xpadding: int = 3
     return pil_images
 
 
-def extract_images_from_pdf2(pdf_path: str) -> List[Dict[str, any]]:
+def extract_images_from_pdf_unstructured(pdf_path: str) -> List[Dict[str, any]]:
     """
     Extracts images from a PDF using the unstructured library.
     Alternative for no 1, but does not work too well on chartQA dataset.
@@ -169,7 +169,7 @@ def extract_images_from_pdf2(pdf_path: str) -> List[Dict[str, any]]:
     
     return images
 
-def extract_images_from_pdf3(pdf_path: str) -> List[Dict[str, any]]:
+def extract_images_from_pdf_chartQA(pdf_path: str) -> List[Dict[str, any]]:
     """
     Extracts images from a PDF by screenshotting the entire PDF page.
     Assumes there is only one image per PDF page.
