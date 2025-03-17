@@ -1,12 +1,11 @@
 import torch
+import torch.nn.functional as F
+
 import numpy as np
 from abc import ABC, abstractmethod
 
-from transformers import AutoProcessor, AutoModel, AutoTokenizer
 from colpali_engine.models import ColPali, ColPaliProcessor
-from sentence_transformers import SentenceTransformer, util
 from openai import OpenAI
-import torch.nn.functional as F
 
 from config import OPENAI_API_KEY
 
@@ -81,5 +80,37 @@ class OpenAIEmbedder(TextEmbedder):
     def embed_text(self, texts):
         client = OpenAI(api_key=OPENAI_API_KEY)
         response = client.embeddings.create(input=texts, model="text-embedding-3-small")
-        embeddings = np.array([item.embedding for item in response.data])
+        embeddings = [item.embedding for item in response.data]
         return embeddings
+
+    def search(self, query, candidate_embeddings, top_k=5):
+        query_embedding = self.embed_text([query])
+
+        # Convert to tensors
+        query_embedding = torch.tensor(query_embedding)  # Shape: (1, d)
+        candidate_embeddings = torch.tensor(candidate_embeddings)  # Shape: (N, d)
+
+        # Compute similarity using dot product (since OpenAI embeddings are normalized)
+        scores = query_embedding @ candidate_embeddings.T  # Shape: (1, N)
+
+        # Get top-k scores and their indices
+        top_scores, top_indices = torch.topk(scores, k=top_k, dim=-1)
+
+        return top_scores.tolist(), top_indices.tolist()
+    
+if __name__ == "__main__":
+    for embedder in [OpenAIEmbedder(), ColPaliEmbedder()]:
+        embeddings = embedder.embed_text(["Hello, world!"])
+
+        text_data = ["Hello, world!", "Goodbye, world!", "Pizza Party :OOO", "7123909dsfasdv¤#2537#", "The quick brown fox jumps over the lazy dog."]
+        candidate_metadata = [{"type": "text", "content": text, "page_number": idx} for idx, text in enumerate(text_data)]
+        candidate_embeddings = embedder.embed_text(text_data)
+        
+        distances, indices = embedder.search("Hello, world!", candidate_embeddings)
+
+        results = []
+        for dist, idx in zip(distances[0], indices[0]):
+            item = candidate_metadata[idx].copy()
+            item["score"] = float(dist)
+            results.append(item)
+        print(results)

@@ -3,7 +3,7 @@ import json
 from pdf2image import convert_from_path
 
 from common_utils import encode_image_to_base64, call_gpt_4
-from pdf_utils import extract_text_from_pdf, extract_images_from_pdf
+from pdf_utils import chunk_text_from_pdf, extract_images_from_pdf
 
 def generate_qa_for_pdf(pdf_path, mode="per_page"):
     """
@@ -56,14 +56,14 @@ def generate_qa_for_pdf(pdf_path, mode="per_page"):
 
     if mode == "per_page":
         # Convert PDF pages to images
-        pages = convert_from_path(pdf_path, dpi=200, poppler_path=r'poppler-24.08.0/Library/bin')
+        pages = convert_from_path(pdf_path, dpi=200)#, poppler_path=r'poppler-24.08.0/Library/bin')
         for i, page_image in enumerate(pages, start=1):
             base64_str = encode_image_to_base64(page_image)
             generate_qa({"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64_str}"}}, i)
 
     elif mode == "per_chunk":
         # Extract text and images from PDF
-        text_data = extract_text_from_pdf(pdf_path)
+        text_data = chunk_text_from_pdf(pdf_path)
         image_data = extract_images_from_pdf(pdf_path)
 
         for text_info in text_data:
