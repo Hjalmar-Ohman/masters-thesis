@@ -1,27 +1,57 @@
 [
     {
         "page_number": 1,
-        "question": "What was the total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023, and how is it divided between loans from banks and other lenders and debt securities?",
-        "answer": "The total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023 was just over SEK 5,500 billion. This amount is divided into SEK 4,000 billion as loans from banks and other lenders, and SEK 1,500 billion issued as debt securities."
+        "question": "What was the HICP inflation rate in the euro area in August, and what factor contributed to its decline?",
+        "answer": "The HICP inflation rate in the euro area fell to 2.2 per cent in August, primarily due to a lower rate of increase in energy prices."
     },
     {
         "page_number": 2,
-        "question": "What type of enterprises tend to borrow the most from banks and other financial institutions according to the data?",
-        "answer": "Large enterprises not publicly owned tend to borrow the most from banks and other financial institutions."
+        "question": "How do consumer prices in Sweden compare to those in the Euro area and the United States from 2019 to 2024?",
+        "answer": "Consumer prices in Sweden generally follow similar trends to those in the Euro area and the United States from 2019 to 2024, with fluctuations in annual percentage change observed across the years."
     },
     {
         "page_number": 3,
-        "question": "What types of borrowing dominate among non-financial companies in Sweden, and which sectors are most active in issuing debt securities?",
-        "answer": "Non-financial companies in Sweden mainly borrow through loans from banks and other financial institutions, while companies in the energy and water supply, industrial and property operations, and certain service industries are most active in issuing debt securities."
+        "question": "What was the action taken by the ECB regarding its deposit rate on September 12, and what is the new rate?",
+        "answer": "The ECB cut its deposit rate by 0.25 percentage points to 3.5 per cent."
     },
     {
         "page_number": 4,
-        "question": "What percentage of issued corporate debt securities was held by the Riksbank at the end of 2023?",
-        "answer": "0.4 percent"
+        "question": "What are the expected cuts in policy rates for the Federal Reserve and the ECB until the middle of next year?",
+        "answer": "Market participants expect the Federal Reserve to cut the policy rate by around 1.7 percentage points, while the ECB is expected to cut the deposit rate by around 1.3 percentage points over the same time period."
     },
     {
         "page_number": 5,
-        "question": "What percentage of Sweden's GDP did the outstanding stock of issued public sector securities amount to at the end of 2023?",
-        "answer": "The outstanding stock of issued public sector securities amounted to just over 340 percent of GDP."
+        "question": "How have the average mortgage rates on new loans changed since the beginning of 2024 compared to the Riksbank's policy rate?",
+        "answer": "The average mortgage rates on new loans have fallen by about as much as the Riksbank has cut its policy rate since the beginning of 2024."
+    },
+    {
+        "page_number": 6,
+        "question": "How have the average deposit rates changed in relation to lending rates when the policy rate is cut?",
+        "answer": "The average deposit rates have fallen, but not as much as the average lending rates when the policy rate is cut."
+    },
+    {
+        "page_number": 7,
+        "question": "What percentage have housing prices risen since the start of the year according to the document?",
+        "answer": "Housing prices have risen by about 2.5 per cent since the start of the year."
+    },
+    {
+        "page_number": 8,
+        "question": "How have lower interest rates in the United States affected the Swedish krona according to the forecast?",
+        "answer": "Lower interest rates in the United States have contributed to the depreciation of the dollar and have supported the appreciation of smaller currencies, including the Swedish krona, which is expected to strengthen in the period ahead."
+    },
+    {
+        "page_number": 9,
+        "question": "What were the primary factors contributing to the decrease in Swedish GDP in the second quarter of the year?",
+        "answer": "The decrease in Swedish GDP by 0.3 percent was largely explained by weak consumption and investment, while the greatest positive contribution came from net exports."
+    },
+    {
+        "page_number": 10,
+        "question": "What does the Riksbank's assessment indicate about the GDP gap in the Swedish economy?",
+        "answer": "The Riksbank's assessment indicates that the GDP gap is lower than normal, which corresponds well to the current demand situation."
+    },
+    {
+        "page_number": 11,
+        "question": "What relationship was observed between the frequency of price changes and inflation rates during the years 2022 and 2023?",
+        "answer": "During 2022 and 2023, when inflation was high, companies increased their prices much more frequently than before, indicating that the frequency of price changes correlates with the rate of inflation."
     }
 ]

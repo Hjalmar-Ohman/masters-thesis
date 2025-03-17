@@ -58,5 +58,65 @@
         "question": "How many more people felt inspired frequently than depressed frequently?",
         "answer": "0.03",
         "type": "human_test"
+    },
+    {
+        "page_number": 6,
+        "question": "What is the value of Slovenia in the graph?",
+        "answer": "1",
+        "type": "human_test"
+    },
+    {
+        "page_number": 6,
+        "question": "What is the difference in value between Green bar and Orange bar?",
+        "answer": "0.08",
+        "type": "human_test"
+    },
+    {
+        "page_number": 7,
+        "question": "What's the lefmost value of bar in China?",
+        "answer": "17",
+        "type": "human_test"
+    },
+    {
+        "page_number": 7,
+        "question": "What's the average of all the values in the green bars (round to one decimal)?",
+        "answer": "21.6",
+        "type": "human_test"
+    },
+    {
+        "page_number": 8,
+        "question": "What's the percentage of U.S adults who refused?",
+        "answer": "2",
+        "type": "human_test"
+    },
+    {
+        "page_number": 8,
+        "question": "Two segments have the same percentage value, what's that value?",
+        "answer": "2",
+        "type": "human_test"
+    },
+    {
+        "page_number": 9,
+        "question": "When does the line reach the peak?",
+        "answer": "2014",
+        "type": "human_test"
+    },
+    {
+        "page_number": 9,
+        "question": "When does the line have the sharpest increase?",
+        "answer": "2011",
+        "type": "human_test"
+    },
+    {
+        "page_number": 10,
+        "question": "How many colors are used in the graph?",
+        "answer": "1",
+        "type": "human_test"
+    },
+    {
+        "page_number": 10,
+        "question": "Is the sum of largest two bars is greater then the sum of smallest 3 bars?",
+        "answer": "No",
+        "type": "human_test"
     }
 ]

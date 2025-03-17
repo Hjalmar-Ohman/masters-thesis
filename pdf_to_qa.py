@@ -1,11 +1,15 @@
-import os
 import json
+import io
+import tempfile
+
+from fpdf import FPDF
+from tqdm import tqdm
 from pdf2image import convert_from_path
 
 from common_utils import encode_image_to_base64, call_gpt_4
 from pdf_utils import chunk_text_from_pdf, extract_images_from_pdf
 
-def generate_qa_for_pdf(pdf_path, mode="per_page"):
+def generate_qa_for_pdf(pdf_path, json_output_path, mode="per_page"):
     """
     Generates Q&A pairs from a PDF file and writes them to a cleaned JSON file.
 
@@ -17,8 +21,6 @@ def generate_qa_for_pdf(pdf_path, mode="per_page"):
     Returns:
         str: Path to the generated JSON file containing the Q&A data.
     """
-
-    output_json = "QA_" + os.path.basename(pdf_path).replace('.pdf', '.json')
     qa_data = []
 
     # Function to generate Q&A from a given input (text or image)
@@ -77,13 +79,60 @@ def generate_qa_for_pdf(pdf_path, mode="per_page"):
         raise ValueError("Invalid mode. Use 'per_page' or 'per_chunk'.")
 
     # Save the cleaned Q&A data to JSON
-    with open(output_json, 'w', encoding='utf-8') as f:
+    with open(json_output_path, 'w', encoding='utf-8') as f:
         json.dump(qa_data, f, ensure_ascii=False, indent=4)
 
-    print(f"Q&A saved to {output_json} using mode: {mode}")
-    
-    return output_json
+    print(f"Q&A saved to {json_output_path} using mode: {mode}")
 
-if __name__ == "__main__":
-    pdf_path = "knowledge/subset_riksbanken.pdf"
-    generate_qa_for_pdf(pdf_path, mode="per_page")
+def generate_chartQA_pdf_and_json(dataset, pdf_output_path='ChartQA_Evaluation_Set.pdf', json_output_path='ChartQA_QA_Mapping.json'):
+    # Initialize the PDF
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+
+    # Initialize JSON structure
+    qa_list = []
+    
+    previous_image = None  # Store the last unique image
+    current_page = 0  # Track the current page number
+
+    # Process each entry in the dataset with a progress bar
+    for idx, data in enumerate(tqdm(dataset, desc="Processing Charts", unit="chart")):
+        image = data['image']
+        
+        # Convert the image to a byte format to compare with the previous one
+        image_bytes = io.BytesIO()
+        image.save(image_bytes, format="PNG")
+        image_bytes = image_bytes.getvalue()  # Get raw bytes
+        
+        # Check if the image is different from the previous one
+        if previous_image != image_bytes:
+            previous_image = image_bytes  # Update the last unique image
+            
+            # Increment the page number since it's a new image
+            current_page += 1
+            
+            # Use a temporary file for FPDF
+            with tempfile.NamedTemporaryFile(delete=True, suffix=".png") as temp_image:
+                image.save(temp_image, format="PNG")
+                temp_image.flush()  # Ensure data is written
+                
+                # Add a new page and insert the image
+                pdf.add_page()
+                pdf.image(temp_image.name, x=10, y=10, w=pdf.w - 20)
+
+        # Append question-answer mapping, linking to the correct page
+        qa_list.append({
+            'page_number': current_page,
+            'question': data['question'],
+            'answer': data['answer'],
+            'type': data['type']
+        })
+
+    # Save the PDF
+    pdf.output(pdf_output_path)
+
+    # Save the JSON file
+    with open(json_output_path, 'w') as json_file:
+        json.dump(qa_list, json_file, indent=4)
+
+    print(f'PDF saved as {pdf_output_path}')
