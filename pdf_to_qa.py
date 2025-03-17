@@ -63,10 +63,10 @@ def generate_qa_for_pdf(pdf_path, mode="per_page"):
 
     elif mode == "per_chunk":
         # Extract text and images from PDF
-        text_data = chunk_text_from_pdf(pdf_path)
+        text_chunks = chunk_text_from_pdf(pdf_path)
         image_data = extract_images_from_pdf(pdf_path)
 
-        for text_info in text_data:
+        for text_info in text_chunks:
             generate_qa({"type": "text", "text": text_info["text"]}, text_info["page_number"])
 
         for data in image_data:

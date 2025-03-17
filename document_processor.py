@@ -34,10 +34,10 @@ class TextProcessor(DocumentProcessor):
         super().__init__(embedder)
 
     def process_pdf(self, pdf_file: str):
-        text_data = chunk_text_from_pdf(pdf_file)
-        texts_list = [td["text"] for td in text_data]
+        text_chunks = chunk_text_from_pdf(pdf_file)
+        texts_list = [td["text"] for td in text_chunks]
         
-        self.metadata = [{"type": "text", "content": td["text"], "page_number": td["page_number"]} for td in text_data]
+        self.metadata = [{"type": "text", "content": td["text"], "page_number": td["page_number"]} for td in text_chunks]
         self.embeddings = self.embedder.embed_text(texts_list)
 
 class ImageProcessor(DocumentProcessor):
@@ -67,8 +67,8 @@ class ImageTextualSummaryProcessor(DocumentProcessor):
         super().__init__(embedder)
 
     def process_pdf(self, pdf_file: str):
-        text_data = chunk_text_from_pdf(pdf_file)
-        texts_list = [td["text"] for td in text_data]
+        text_chunks = chunk_text_from_pdf(pdf_file)
+        texts_list = [td["text"] for td in text_chunks]
         image_data = extract_images_from_pdf(pdf_file)
         pil_images_list = [img_info["pil_image"] for img_info in image_data]
         base64_images_list = [encode_image_to_base64(pil_img) for pil_img in pil_images_list]
@@ -86,7 +86,7 @@ class ImageTextualSummaryProcessor(DocumentProcessor):
         self.embeddings = self.embedder.embed_text(all_texts)
 
         self.metadata = []
-        for td in text_data:
+        for td in text_chunks:
             self.metadata.append({"type": "text", "content": td["text"], "page_number": td["page_number"]})
         for i, img_info in enumerate(image_data):
             self.metadata.append({"type": "image", "content": base64_images_list[i], "page_number": img_info["page_number"]})
