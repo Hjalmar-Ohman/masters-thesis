@@ -1,11 +1,11 @@
-from typing import List
+from typing import List, Union
 
 from ragas.metrics import MultiModalRelevance, MultiModalFaithfulness
 from ragas import evaluate, EvaluationDataset
 
 def compute_mrr_at_k(
-    all_retrieved_pages: List[List[int]] or List[int], 
-    all_real_pages: List[List[int]] or List[int], 
+    all_retrieved_pages: Union[List[List[int]], List[int]], 
+    all_real_pages: Union[List[List[int]], List[int]], 
     k: int
 ) -> float:
     if isinstance(all_retrieved_pages[0], int):
@@ -31,8 +31,8 @@ def compute_mrr_at_k(
     return sum(reciprocal_ranks) / len(reciprocal_ranks) if reciprocal_ranks else 0.0
 
 def compute_recall_at_k(
-    all_retrieved_pages: List[List[int]] or List[int], 
-    all_real_pages: List[List[int]] or List[int], 
+    all_retrieved_pages: Union[List[List[int]], List[int]], 
+    all_real_pages: Union[List[List[int]], List[int]], 
     k: int
 ) -> float:
     if isinstance(all_retrieved_pages[0], int):
@@ -53,8 +53,8 @@ def compute_recall_at_k(
     return total_hits / total_relevant if total_relevant else 0.0
 
 def compute_precision_at_k(
-    all_retrieved_pages: List[List[int]] or List[int], 
-    all_real_pages: List[List[int]] or List[int], 
+    all_retrieved_pages: Union[List[List[int]], List[int]], 
+    all_real_pages: Union[List[List[int]], List[int]], 
     k: int
 ) -> float:
     if isinstance(all_retrieved_pages[0], int):
