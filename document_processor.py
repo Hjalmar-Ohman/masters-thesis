@@ -71,7 +71,7 @@ class PageImageProcessor(DocumentProcessor):
         self.dpi = dpi
 
     def process_pdf(self, pdf_file: str):
-        pages = convert_from_path(pdf_file, dpi=self.dpi, poppler_path=r'poppler-24.08.0/Library/bin')
+        pages = convert_from_path(pdf_file, dpi=self.dpi)
 
         self.metadata = [{"type": "page_image", "content": encode_image_to_base64(page_img), "page_number": i + 1} for i, page_img in enumerate(pages)]
         self.embeddings = self.embedder.embed_image(pages).astype("float32")
