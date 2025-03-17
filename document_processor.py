@@ -36,6 +36,8 @@ class TextProcessor(DocumentProcessor):
 
     def process_pdf(self, pdf_file: str):
         text_chunks = chunk_text_from_pdf(pdf_file)
+        if not text_chunks:
+            return
         texts_list = [td["text"] for td in text_chunks]
         
         self.metadata = [{"type": "text", "content": td["text"], "page_number": td["page_number"]} for td in text_chunks]
