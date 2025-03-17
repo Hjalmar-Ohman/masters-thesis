@@ -2,34 +2,72 @@ import cv2
 import numpy as np
 from typing import List, Dict
 
+import tiktoken
 from PyPDF2 import PdfReader
 import fitz  # PyMuPDF
 from PIL import Image
 
-def extract_text_from_pdf(pdf_path: str) -> List[Dict[str, any]]:
-    """
-    Extracts text from a PDF file.
+def num_tokens_from_string(string: str, encoding_name: str) -> int:
+    """Returns the number of tokens in a text string."""
+    encoding = tiktoken.get_encoding(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
 
+def chunk_text_from_pdf(pdf_path: str, chunk_size_max: int = 512) -> List[Dict[str, any]]:
+    """
+    Chunks text from a PDF file, ensuring sentence-level boundaries where possible.
+    If a page's text exceeds chunk_size_max tokens, it will be split on the last period 
+    before the token limit.
+    
     Args:
         pdf_path (str): The path to the PDF file.
-
+        chunk_size_max (int): The maximum number of tokens per chunk (default 512 tokens).
+    
     Returns:
         List[Dict[str, any]]: A list of dictionaries where each dictionary contains:
-            - "text" (str): Extracted text from the page.
-            - "page_number" (int): The page number where the text was extracted.
+            - "text" (str): The chunked text.
+            - "page_number" (int): The page number from which the text was extracted.
     """
-    text_data = []
+    text_chunks = []
     reader = PdfReader(pdf_path)
 
     for page_i, page in enumerate(reader.pages):
         page_text = page.extract_text()
         if page_text and page_text.strip():
-            text_data.append({
-                "text": page_text.strip(),
-                "page_number": page_i + 1  # Page numbers should be 1-based
-            })
+            text = page_text.strip()
+            start = 0
+            while start < len(text):
+                # Binary search for the maximum substring length that fits within chunk_size_max tokens.
+                low = start
+                high = len(text)
+                best = start
+                while low <= high:
+                    mid = (low + high) // 2
+                    candidate = text[start:mid]
+                    if num_tokens_from_string(candidate, "cl100k_base") <= chunk_size_max:
+                        best = mid
+                        low = mid + 1
+                    else:
+                        high = mid - 1
 
-    return text_data
+                # Look for the last period in the candidate substring
+                last_period = text.rfind(".", start, best)
+                if last_period != -1 and last_period > start:
+                    chunk_end = last_period + 1  # Include the period in the chunk
+                else:
+                    chunk_end = best
+
+                chunk = text[start:chunk_end].strip()
+                if chunk:
+                    text_chunks.append({
+                        "text": chunk,
+                        "page_number": page_i + 1  # 1-based indexing for page numbers
+                    })
+                start = chunk_end
+                # Skip any whitespace before processing the next chunk
+                while start < len(text) and text[start].isspace():
+                    start += 1
+    return text_chunks
 
 
 def extract_images_from_pdf(pdf_path: str, padding: int = 300, xpadding: int = 300) -> List[Dict[str, any]]:
@@ -86,3 +124,7 @@ def extract_images_from_pdf(pdf_path: str, padding: int = 300, xpadding: int = 3
 
     doc.close()
     return pil_images
+
+if __name__ == "__main__":
+    for chunk in chunk_text_from_pdf("knowledge/subset_riksbanken.pdf"):
+        print({"type": "text", "content": chunk["text"], "page_number": chunk["page_number"]}, "\n")

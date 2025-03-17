@@ -12,17 +12,16 @@ class MultimodalRAG:
         self.processors = processors
         self.pdf_file = pdf_file
 
-        # Process the PDF in every document processor (builds the FAISS index and metadata)
         for processor in self.processors:
             processor.process_pdf(pdf_file)
 
     def get_most_relevant_docs(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         all_results = []
         for processor in self.processors:
-            results = processor.search(query, top_k=top_k)
+            results = processor.search(query, top_k=top_k // len(self.processors))
             all_results.extend(results)
 
-        sorted_results = sorted(all_results, key=lambda x: x["distance"], reverse=False)
+        sorted_results = sorted(all_results, key=lambda x: x["score"], reverse=True)
 
         return sorted_results[:top_k]
 
@@ -50,6 +49,5 @@ class MultimodalRAG:
             else:
                 raise ValueError(f"Unknown doc type: {doc['type']}")
 
-        # Here you would call GPT-4 with the constructed prompt.
         gpt_response = call_gpt_4(user_content)
         return gpt_response
