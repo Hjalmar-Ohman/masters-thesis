@@ -3,7 +3,7 @@ import abc
 from typing import List, Dict, Any
 from pdf2image import convert_from_path
 
-from pdf_utils import chunk_text_from_pdf, extract_images_from_pdf
+from pdf_utils import chunk_text_from_pdf, extract_images_from_pdf, extract_images_from_pdf2, extract_images_from_pdf3
 from common_utils import encode_image_to_base64, call_gpt_4
 from embedder import MultimodalEmbedder, TextEmbedder
 
@@ -29,6 +29,7 @@ class DocumentProcessor(abc.ABC):
             results.append(item)
         return results
 
+
 class TextProcessor(DocumentProcessor):
     def __init__(self, embedder: TextEmbedder):
         super().__init__(embedder)
@@ -39,6 +40,7 @@ class TextProcessor(DocumentProcessor):
         
         self.metadata = [{"type": "text", "content": td["text"], "page_number": td["page_number"]} for td in text_chunks]
         self.embeddings = self.embedder.embed_text(texts_list)
+
 
 class ImageProcessor(DocumentProcessor):
     def __init__(self, embedder: MultimodalEmbedder):
@@ -51,6 +53,7 @@ class ImageProcessor(DocumentProcessor):
         self.metadata = [{"type": "image", "content": encode_image_to_base64(info["pil_image"]), "page_number": info["page_number"]} for info in image_data]
         self.embeddings = self.embedder.embed_image(pil_images_list)
 
+
 class PageImageProcessor(DocumentProcessor):
     def __init__(self, embedder: MultimodalEmbedder, dpi=200):
         super().__init__(embedder)
@@ -62,14 +65,23 @@ class PageImageProcessor(DocumentProcessor):
         self.metadata = [{"type": "page_image", "content": encode_image_to_base64(page_img), "page_number": i + 1} for i, page_img in enumerate(pages)]
         self.embeddings = self.embedder.embed_image(pages)
 
+
 class ImageTextualSummaryProcessor(DocumentProcessor):
-    def __init__(self, embedder: TextEmbedder):
+    def __init__(self, embedder: TextEmbedder, no=1):
         super().__init__(embedder)
+        self.no = no
 
     def process_pdf(self, pdf_file: str):
         text_chunks = chunk_text_from_pdf(pdf_file)
         texts_list = [td["text"] for td in text_chunks]
-        image_data = extract_images_from_pdf(pdf_file)
+        if self.no == 1:
+            image_data = extract_images_from_pdf(pdf_file)
+        elif self.no == 2:
+            image_data = extract_images_from_pdf2(pdf_file)
+        elif self.no == 3:
+            image_data = extract_images_from_pdf3(pdf_file)
+        else:
+            raise ValueError("Invalid version specified. Choose 1, 2, or 3.")
         pil_images_list = [img_info["pil_image"] for img_info in image_data]
         base64_images_list = [encode_image_to_base64(pil_img) for pil_img in pil_images_list]
 
