@@ -1,27 +1,27 @@
 [
     {
         "page_number": 1,
-        "question": "What was the total interest-bearing debt of Swedish non-financial companies at the end of 2023, and how is this amount distributed between loans and debt securities?",
-        "answer": "At the end of 2023, the total interest-bearing debt of Swedish non-financial companies was just over SEK 5,500 billion. Of this, SEK 4,000 billion were loans from banks and other lenders, and SEK 1,500 billion were issued debt securities."
+        "question": "What was the total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023, and how is it divided between loans from banks and other lenders and debt securities?",
+        "answer": "The total amount of interest-bearing debt for Swedish non-financial companies at the end of 2023 was just over SEK 5,500 billion. This amount is divided into SEK 4,000 billion as loans from banks and other lenders, and SEK 1,500 billion issued as debt securities."
     },
     {
         "page_number": 2,
-        "question": "What type of companies primarily borrow from banks and other financial institutions according to the data?",
-        "answer": "Large enterprises not publicly owned primarily borrow from banks and other financial institutions."
+        "question": "What type of enterprises tend to borrow the most from banks and other financial institutions according to the data?",
+        "answer": "Large enterprises not publicly owned tend to borrow the most from banks and other financial institutions."
     },
     {
         "page_number": 3,
-        "question": "What type of companies primarily dominate securities borrowing according to the text?",
-        "answer": "Property companies dominate securities borrowing."
+        "question": "What types of borrowing dominate among non-financial companies in Sweden, and which sectors are most active in issuing debt securities?",
+        "answer": "Non-financial companies in Sweden mainly borrow through loans from banks and other financial institutions, while companies in the energy and water supply, industrial and property operations, and certain service industries are most active in issuing debt securities."
     },
     {
         "page_number": 4,
-        "question": "What percentage of the issued corporate debt securities was owned by the Riksbank at the end of 2023?",
+        "question": "What percentage of issued corporate debt securities was held by the Riksbank at the end of 2023?",
         "answer": "0.4 percent"
     },
     {
         "page_number": 5,
-        "question": "What was the outstanding stock of issued public sector securities in Sweden at the end of 2023 and what types of bonds contributed to this amount?",
-        "answer": "At the end of 2023, the outstanding stock of issued public sector securities in Sweden amounted to almost SEK 1,200 billion, comprised mainly of government bonds, with around SEK 250 billion consisting of municipal bonds issued by municipalities and regions."
+        "question": "What percentage of Sweden's GDP did the outstanding stock of issued public sector securities amount to at the end of 2023?",
+        "answer": "The outstanding stock of issued public sector securities amounted to just over 340 percent of GDP."
     }
 ]
