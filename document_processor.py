@@ -3,7 +3,7 @@ import abc
 from typing import List, Dict, Any
 from pdf2image import convert_from_path
 
-from pdf_utils import chunk_text_from_pdf, extract_images_from_pdf, extract_images_from_pdf2, extract_images_from_pdf3
+from pdf_utils import chunk_text_from_pdf, extract_images_from_pdf, extract_images_from_pdf_unstructured, extract_images_from_pdf_chartQA
 from common_utils import encode_image_to_base64, call_gpt_4
 from embedder import MultimodalEmbedder, TextEmbedder
 
@@ -79,9 +79,9 @@ class ImageTextualSummaryProcessor(DocumentProcessor):
         if self.no == 1:
             image_data = extract_images_from_pdf(pdf_file)
         elif self.no == 2:
-            image_data = extract_images_from_pdf2(pdf_file)
+            image_data = extract_images_from_pdf_unstructured(pdf_file)
         elif self.no == 3:
-            image_data = extract_images_from_pdf3(pdf_file)
+            image_data = extract_images_from_pdf_chartQA(pdf_file)
         else:
             raise ValueError("Invalid version specified. Choose 1, 2, or 3.")
         pil_images_list = [img_info["pil_image"] for img_info in image_data]

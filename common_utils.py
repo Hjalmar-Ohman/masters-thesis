@@ -1,12 +1,5 @@
 import io
 import base64
-import cv2
-import numpy as np
-from typing import List, Dict
-
-from PyPDF2 import PdfReader
-import fitz  # PyMuPDF
-from PIL import Image
 
 from openai import OpenAI
 from config import OPENAI_API_KEY
