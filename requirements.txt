@@ -190,8 +190,8 @@ zstandard==0.23.0
 # Windows only dependency
 pywin32==308; sys_platform == 'win32'
 fpdf2==2.0.0
-unstructured==0.1.0
-pdfminer.six==20221105
-pi_heif==0.1.0
-unstructured_inference==0.1.0
-unstructured_pytesseract==0.1.0
+unstructured
+pdfminer.six==20231228
+pi_heif
+unstructured_inference
+unstructured_pytesseract
