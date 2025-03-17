@@ -3,7 +3,7 @@ import base64
 import cv2
 import numpy as np
 from typing import List, Dict
-
+import json
 from PyPDF2 import PdfReader
 import fitz  # PyMuPDF
 from PIL import Image
