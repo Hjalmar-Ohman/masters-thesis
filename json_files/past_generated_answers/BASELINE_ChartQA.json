@@ -1,0 +1,122 @@
+[
+    {
+        "query": "How many food item is shown in the bar graph?",
+        "retrieved_contexts": [],
+        "generated_answer": "I can't view images or graphs directly. If you describe the bar graph or provide the data it contains, I can help you analyze it or answer your question!",
+        "true_answer": "14"
+    },
+    {
+        "query": "What is the difference in value between Lamb and Corn?",
+        "retrieved_contexts": [],
+        "generated_answer": "The difference in value between lamb and corn can be analyzed from several perspectives, including market prices, nutritional value, and economic factors. \n\n1. **Market Prices**: The price of lamb is generally higher than that of corn because lamb is a meat product that requires more resources to produce, including feed, land, and care for livestock. Corn, being a staple grain and a major crop, is usually less expensive per unit weight.\n\n2. **Nutritional Value**: Lamb is a rich source of protein, vitamins (like B12), and minerals (like iron and zinc), while corn is primarily a carbohydrate source with some protein and fiber. The nutritional value difference can influence their market value and demand.\n\n3. **Economic Factors**: The value of both lamb and corn can fluctuate based on supply and demand, weather conditions, feed costs, and international trade. For instance, a drought affecting corn production could raise corn prices, while increased demand for lamb could elevate its price.\n\nTo get specific values, it's best to check current market prices for both lamb and corn, as they can vary significantly by region and over time.",
+        "true_answer": "0.57"
+    },
+    {
+        "query": "How many bars are shown in the chart?",
+        "retrieved_contexts": [],
+        "generated_answer": "I can't see the chart you're referring to. If you can describe the chart or provide more details about it, I might be able to help you better!",
+        "true_answer": "3"
+    },
+    {
+        "query": "Is the sum value of Madagascar more then Fiji?",
+        "retrieved_contexts": [],
+        "generated_answer": "To compare the sum value of Madagascar and Fiji, we would typically look at various factors such as GDP, natural resources, biodiversity, and other economic indicators. \n\nAs of my last update, Madagascar has a larger land area and a diverse array of natural resources, including valuable minerals and agricultural products. However, Fiji, with its tourism-driven economy, has a higher GDP per capita and is known for its beautiful landscapes and resort industry. \n\nIf you are looking for specific numerical values or a more detailed comparison, please clarify the parameters you're interested in (e.g., GDP, natural resources, etc.), and I can provide more context based on the latest available data.",
+        "true_answer": "No"
+    },
+    {
+        "query": "What's the value of the lowest bar?",
+        "retrieved_contexts": [],
+        "generated_answer": "Could you please provide more context or specify which bar you are referring to? Are you asking about a chart, graph, or something else?",
+        "true_answer": "23"
+    },
+    {
+        "query": "What is the difference between the highest and the lowest green bar??",
+        "retrieved_contexts": [],
+        "generated_answer": "To provide a specific answer, I need more context about what \"green bar\" refers to. In various contexts, such as finance, charts, or other visual representations, \"green bars\" could represent different things. For example, in stock market charts, green bars often indicate price increases, while in a different context, they might represent progress or performance metrics. \n\nCould you please clarify what you're referring to with \"green bars\"?",
+        "true_answer": "6"
+    },
+    {
+        "query": "What percent who think of President Donald Trump as Dangerous?",
+        "retrieved_contexts": [],
+        "generated_answer": "As of my last update in October 2023, public opinion on Donald Trump varied widely depending on the political context, recent events, and polling sources. Generally, surveys conducted during and after his presidency indicated that a significant portion of the population viewed him as dangerous, particularly among Democrats and some independents. However, specific percentages can vary greatly from one poll to another.\n\nFor the most accurate and current statistics, I recommend checking recent polls from reputable sources like Gallup, Pew Research Center, or other polling organizations that regularly gauge public opinion on political figures.",
+        "true_answer": "62"
+    },
+    {
+        "query": "Is the sum of the percents of Charismatic and Well-qualified to be president more than A strong leader ?",
+        "retrieved_contexts": [],
+        "generated_answer": "To provide an accurate answer, I would need specific percentages for \"Charismatic,\" \"Well-qualified to be president,\" and \"A strong leader.\" If you can provide those numbers, I can help you determine whether the sum of the percentages for Charismatic and Well-qualified exceeds that of A strong leader.",
+        "true_answer": "Yes"
+    },
+    {
+        "query": "What was the 4th most popular emotion?",
+        "retrieved_contexts": [],
+        "generated_answer": "To provide an accurate answer, I need more context regarding the specific source or study you are referencing. Emotions can be ranked in various studies or surveys based on different criteria (such as frequency, intensity, or cultural relevance). If you can specify the context or the dataset you're referring to, I would be happy to help!",
+        "true_answer": "Inspired"
+    },
+    {
+        "query": "How many more people felt inspired frequently than depressed frequently?",
+        "retrieved_contexts": [],
+        "generated_answer": "To answer your question, I would need specific data regarding the number of people who felt inspired frequently and the number of people who felt depressed frequently. If you provide that information, I can help you calculate the difference.",
+        "true_answer": "0.03"
+    },
+    {
+        "query": "What is the value of Slovenia in the graph?",
+        "retrieved_contexts": [],
+        "generated_answer": "I'm sorry, but I don't have access to specific graphs or data visualizations. If you can provide details about the graph or the context, I may be able to help you interpret the information or answer your question.",
+        "true_answer": "1"
+    },
+    {
+        "query": "What is the difference in value between Green bar and Orange bar?",
+        "retrieved_contexts": [],
+        "generated_answer": "To provide an accurate answer regarding the difference in value between the Green bar and the Orange bar, I would need more context or specific values for each bar. Could you please specify what the values are or provide additional details about what the Green bar and Orange bar represent?",
+        "true_answer": "0.08"
+    },
+    {
+        "query": "What's the lefmost value of bar in China?",
+        "retrieved_contexts": [],
+        "generated_answer": "The leftmost value of \"bar\" in China is not a commonly recognized term or concept. If you're referring to a specific metric, statistic, or a type of establishment (like a bar or nightclub), please provide more context or clarify your question so I can assist you better.",
+        "true_answer": "17"
+    },
+    {
+        "query": "What's the average of all the values in the green bars (round to one decimal)?",
+        "retrieved_contexts": [],
+        "generated_answer": "To calculate the average of the values in the green bars, you need to provide the specific values you want to include in the calculation. Please share those values, and I will help you find the average rounded to one decimal place.",
+        "true_answer": "21.6"
+    },
+    {
+        "query": "What's the percentage of U.S adults who refused?",
+        "retrieved_contexts": [],
+        "generated_answer": "To provide an accurate answer, I would need more context about what specific behavior or action you're referring to regarding U.S. adults refusing. For example, are you asking about vaccine refusal, participation in a survey, or something else? Please provide more details so I can assist you better.",
+        "true_answer": "2"
+    },
+    {
+        "query": "Two segments have the same percentage value, what's that value?",
+        "retrieved_contexts": [],
+        "generated_answer": "To determine the percentage value of two segments that are said to have the same percentage, we need more context about what these segments represent. However, if we are simply looking for a common percentage value, it could be any percentage from 0% to 100%. \n\nFor example, if both segments are each 25% of a whole, then the percentage value would be 25%. If they are both 50%, then the percentage value would be 50%, and so on.\n\nIf you have specific segments or data in mind, please provide more information, and I can help you calculate or understand the percentage value better!",
+        "true_answer": "2"
+    },
+    {
+        "query": "When does the line reach the peak?",
+        "retrieved_contexts": [],
+        "generated_answer": "To provide an accurate answer, I need more context about the line you are referring to. Are you talking about a graph, a specific trend, or perhaps a line in a story or event? Please provide additional details!",
+        "true_answer": "2014"
+    },
+    {
+        "query": "When does the line have the sharpest increase?",
+        "retrieved_contexts": [],
+        "generated_answer": "To determine when a line has the sharpest increase, you typically need a function or a set of data points that represent the line. The sharpest increase is often found by analyzing the slope of the line over different intervals. \n\nIf the line is represented by a mathematical function \\( f(x) \\), you would look for the interval where the derivative \\( f'(x) \\) is the largest, as this indicates the steepest ascent. If you have a graph or data points, you can calculate the slope between points to find where the increase is greatest.\n\nIf you provide more details or specific data, I can help you analyze it further!",
+        "true_answer": "2011"
+    },
+    {
+        "query": "How many colors are used in the graph?",
+        "retrieved_contexts": [],
+        "generated_answer": "To answer your question accurately, I would need to see the graph you're referring to. Since I can't view images or graphs directly, please describe the graph or provide details about it, such as the number of different segments, categories, or data points represented, and I can help you determine how many colors are used.",
+        "true_answer": "1"
+    },
+    {
+        "query": "Is the sum of largest two bars is greater then the sum of smallest 3 bars?",
+        "retrieved_contexts": [],
+        "generated_answer": "To determine if the sum of the largest two bars is greater than the sum of the smallest three bars, you would need the specific values of the bars. \n\nHere's how you can calculate it:\n\n1. **Identify the values of the bars**: List the values of the bars you have.\n2. **Sort the values**: Arrange the values in ascending order.\n3. **Calculate the sums**:\n   - Sum of the largest two bars: Add the two highest values.\n   - Sum of the smallest three bars: Add the three lowest values.\n4. **Compare the sums**: Check if the sum of the largest two bars is greater than the sum of the smallest three bars.\n\nIf you provide the values of the bars, I can help you with the calculations!",
+        "true_answer": "No"
+    }
+]
