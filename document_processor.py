@@ -1,4 +1,5 @@
 import abc
+import torch
 
 from typing import List, Dict, Any
 from pdf2image import convert_from_path
@@ -45,15 +46,35 @@ class TextProcessor(DocumentProcessor):
 
 
 class ImageProcessor(DocumentProcessor):
-    def __init__(self, embedder: MultimodalEmbedder):
+    def __init__(self, embedder: MultimodalEmbedder, dataset: str, batch_size=4, ):
         super().__init__(embedder)
+        self.batch_size = batch_size
+        self.dataset = dataset
 
     def process_pdf(self, pdf_file: str):
-        image_data = extract_images_from_pdf(pdf_file)
+        if self.dataset.upper() == "CHARTQA":
+            image_data = extract_images_from_pdf_chartQA(pdf_file)
+            print("Extracted images from ChartQA dataset.")
+        else:
+            image_data = extract_images_from_pdf_unstructured(pdf_file)
+ 
         pil_images_list = [info["pil_image"] for info in image_data]
-        
-        self.metadata = [{"type": "image", "content": encode_image_to_base64(info["pil_image"]), "page_number": info["page_number"]} for info in image_data]
-        self.embeddings = self.embedder.embed_image(pil_images_list)
+
+        self.metadata = [
+            {"type": "image", "content": encode_image_to_base64(info["pil_image"]), "page_number": info["page_number"]}
+            for info in image_data
+        ]
+
+        # **Batching Logic**
+        all_embeddings = []
+        for i in range(0, len(pil_images_list), self.batch_size):
+            batch = pil_images_list[i:i + self.batch_size]
+            batch_embeddings = self.embedder.embed_image(batch)
+            all_embeddings.append(batch_embeddings)
+
+            torch.cuda.empty_cache()  # Free GPU memory after each batch
+
+        self.embeddings = torch.cat(all_embeddings, dim=0)
 
 
 class PageImageProcessor(DocumentProcessor):
@@ -69,21 +90,20 @@ class PageImageProcessor(DocumentProcessor):
 
 
 class ImageTextualSummaryProcessor(DocumentProcessor):
-    def __init__(self, embedder: TextEmbedder, no=1):
+    def __init__(self, embedder: TextEmbedder, dataset: str):
         super().__init__(embedder)
-        self.no = no
+        self.dataset = dataset
 
     def process_pdf(self, pdf_file: str):
         text_chunks = chunk_text_from_pdf(pdf_file)
         texts_list = [td["text"] for td in text_chunks]
-        if self.no == 1:
-            image_data = extract_images_from_pdf(pdf_file)
-        elif self.no == 2:
-            image_data = extract_images_from_pdf_unstructured(pdf_file)
-        elif self.no == 3:
+        
+        if self.dataset.upper() == "CHARTQA":
             image_data = extract_images_from_pdf_chartQA(pdf_file)
+            print("Extracted images from ChartQA dataset.")
         else:
-            raise ValueError("Invalid version specified. Choose 1, 2, or 3.")
+            image_data = extract_images_from_pdf_unstructured(pdf_file)
+ 
         pil_images_list = [img_info["pil_image"] for img_info in image_data]
         base64_images_list = [encode_image_to_base64(pil_img) for pil_img in pil_images_list]
 

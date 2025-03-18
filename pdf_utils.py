@@ -151,7 +151,6 @@ def extract_images_from_pdf_unstructured(pdf_path: str) -> List[Dict[str, any]]:
     chunks = partition_pdf(
         filename=pdf_path,
         infer_table_structure=False,          # No need to extract tables
-        strategy="hi_res",                   # High-resolution extraction
         extract_image_block_types=["Image"],  # Extract only images
         extract_image_block_to_payload=True   # Get images as base64
     )
