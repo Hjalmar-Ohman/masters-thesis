@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from ragas.metrics import MultiModalRelevance, MultiModalFaithfulness
+from ragas.metrics import MultiModalRelevance, MultiModalFaithfulness, AnswerCorrectness
 from ragas import evaluate, EvaluationDataset
 
 def compute_mrr_at_k(
@@ -93,5 +93,5 @@ def evaluate_generation(rag_answers: List[dict], evaluator_llm):
     ]
 
     evaluation_dataset = EvaluationDataset.from_list(formatted_answers)
-    result = evaluate(dataset=evaluation_dataset, metrics=[MultiModalFaithfulness(), MultiModalRelevance()], llm=evaluator_llm)
+    result = evaluate(dataset=evaluation_dataset, metrics=[MultiModalFaithfulness(), MultiModalRelevance(), AnswerCorrectness()], llm=evaluator_llm)
     return result
