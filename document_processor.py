@@ -1,4 +1,5 @@
 import abc
+import torch
 
 from typing import List, Dict, Any
 from pdf2image import convert_from_path
@@ -45,15 +46,29 @@ class TextProcessor(DocumentProcessor):
 
 
 class ImageProcessor(DocumentProcessor):
-    def __init__(self, embedder: MultimodalEmbedder):
+    def __init__(self, embedder: MultimodalEmbedder, batch_size=4):
         super().__init__(embedder)
+        self.batch_size = batch_size
 
     def process_pdf(self, pdf_file: str):
-        image_data = extract_images_from_pdf(pdf_file)
+        image_data = extract_images_from_pdf_unstructured(pdf_file)
         pil_images_list = [info["pil_image"] for info in image_data]
-        
-        self.metadata = [{"type": "image", "content": encode_image_to_base64(info["pil_image"]), "page_number": info["page_number"]} for info in image_data]
-        self.embeddings = self.embedder.embed_image(pil_images_list)
+
+        self.metadata = [
+            {"type": "image", "content": encode_image_to_base64(info["pil_image"]), "page_number": info["page_number"]}
+            for info in image_data
+        ]
+
+        # **Batching Logic**
+        all_embeddings = []
+        for i in range(0, len(pil_images_list), self.batch_size):
+            batch = pil_images_list[i:i + self.batch_size]
+            batch_embeddings = self.embedder.embed_image(batch)
+            all_embeddings.append(batch_embeddings)
+
+            torch.cuda.empty_cache()  # Free GPU memory after each batch
+
+        self.embeddings = torch.cat(all_embeddings, dim=0)
 
 
 class PageImageProcessor(DocumentProcessor):
