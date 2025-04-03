@@ -81,6 +81,39 @@ def compute_f1_score(retrieved_pages, real_pages, k):
             return 0.0
         return 2 * (precision * recall) / (precision + recall)
 
+def compute_map_at_k(
+    all_retrieved_pages: Union[List[List[int]], List[int]], 
+    all_real_pages: Union[List[List[int]], List[int]], 
+    k: int
+) -> float:
+    if isinstance(all_retrieved_pages[0], int):
+        all_retrieved_pages = [all_retrieved_pages]
+        all_real_pages = [all_real_pages]
+    
+    average_precisions = []
+    
+    for retrieved_pages, real_pages in zip(all_retrieved_pages, all_real_pages):
+        top_k_pages = retrieved_pages[:k]
+        
+        num_relevant = 0
+        precision_sum = 0.0
+        
+        for i, page in enumerate(top_k_pages):
+            if page in real_pages:
+                num_relevant += 1
+                precision_at_i = num_relevant / (i + 1)  # Precision@i (1-based index)
+                precision_sum += precision_at_i
+        
+        if num_relevant > 0:
+            average_precision = precision_sum / num_relevant  # Normalize by the number of relevant documents retrieved
+        else:
+            average_precision = 0.0
+        
+        average_precisions.append(average_precision)
+    
+    return sum(average_precisions) / len(average_precisions) if average_precisions else 0.0
+
+
 def evaluate_generation(rag_answers: List[dict], evaluator_llm):
     formatted_answers = [
         {
