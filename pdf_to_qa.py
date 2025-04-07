@@ -16,8 +16,9 @@ def generate_qa_for_pdf(pdf_path, json_output_path, mode="per_image"):
     Parameters:
         pdf_path (str): Path to the PDF file.
         mode (str): "per_page" processes each page as an image,
-                    "per_chunk" processes extracted text and images separately.
-                    "per_image" processes only images.
+                    "per_chunk" processes extracted text and images separately,
+                    "per_image" processes only the images embedded in the PDF.
+
 
     Returns:
         str: Path to the generated JSON file containing the Q&A data.
@@ -62,7 +63,7 @@ def generate_qa_for_pdf(pdf_path, json_output_path, mode="per_image"):
 
     if mode == "per_page":
         # Convert PDF pages to images
-        pages = convert_from_path(pdf_path, dpi=200)#, poppler_path=r'poppler-24.08.0/Library/bin')
+        pages = convert_from_path(pdf_path, dpi=200)
         for i, page_image in enumerate(pages, start=1):
             base64_str = encode_image_to_base64(page_image)
             generate_qa({"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64_str}"}}, i)
@@ -104,8 +105,17 @@ def generate_qa_for_pdf(pdf_path, json_output_path, mode="per_image"):
             }
             generate_qa(image_input, data["page_number"], custom_prompt)
 
+    elif mode == "per_image":
+        # Only process images
+        image_data = extract_images_from_pdf(pdf_path)
+
+        for data in image_data:
+            base64_str = encode_image_to_base64(data["pil_image"])
+            generate_qa({"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64_str}"}}, data["page_number"])
+
     else:
-        raise ValueError("Invalid mode. Use 'per_page' or 'per_chunk' or 'per_image'.")
+        raise ValueError("Invalid mode. Use 'per_page', 'per_chunk', or 'per_image'.")
+
 
     # Save the cleaned Q&A data to JSON
     with open(json_output_path, 'w', encoding='utf-8') as f:
