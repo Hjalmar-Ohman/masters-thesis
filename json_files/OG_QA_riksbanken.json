@@ -180,19 +180,29 @@
         "answer": "The highest annual percentage change in real wages (CPI) recorded was approximately 4%."
     },
     {
+        "page_number": 32,
+        "question": "What is the expected policy rate at the end of the forecast period?",
+        "answer": "The policy rate is expected to reach 2.25 percent at the end of the forecast period."
+    },
+    {
+        "page_number": 32,
+        "question": "What trend in inflation is observed over the last few months, and what is the expected outlook for growth in the economy?",
+        "answer": "Inflation has fallen over the last few months."
+    },
+    {
         "page_number": 34,
         "question": "What was the GDP index value in September 2023 compared to June 2023?",
-        "answer": "The GDP index value in September 2023 was about the same as in June 2023"
+        "answer": "The GDP index value in September 2023 was higher than in June 2023, reflecting an upward trend."
     },
     {
         "page_number": 34,
         "question": "What is the projected household consumption level in Sweden for the year 2025 according to the dashed line?",
-        "answer": "Approximately 105."
+        "answer": "Approximately 110."
     },
     {
         "page_number": 35,
         "question": "What was the contribution of household consumption to GDP in 2021 compared to 2022?",
-        "answer": "In 2021, the contribution of household consumption to GDP was approximately 2.5 percentage points, while in 2022, it decreased to around 1.5 percentage points."
+        "answer": "In 2021, the contribution of household consumption to GDP was approximately 6 percentage points, while in 2022, it decreased to around 3 percentage points."
     },
     {
         "page_number": 36,
@@ -202,7 +212,17 @@
     {
         "page_number": 36,
         "question": "What is the projected employment rate for June in 2025 according to the forecast?",
-        "answer": "The projected employment rate for June in 2025 is approximately 69%."
+        "answer": "The projected employment rate for June in 2025 is approximately 70.5%."
+    },
+    {
+        "page_number": 37,
+        "question": "What is the projected impact of the proposed fiscal policy in the Budget Bill for 2025 on the development of GDP?",
+        "answer": "The proposed fiscal policy is expected to make a somewhat positive contribution to the development of GDP in 2025."
+    },
+    {
+        "page_number": 37,
+        "question": "What is the trend of the GDP gap and employment gap from 2005 to 2025, and how do they compare at the end of this period?",
+        "answer": "The GDP gap shows a general upward trend with fluctuations, peaking around 2020, while the employment gap also exhibits a similar but slightly less pronounced trend. By 2025, both gaps appear to converge around zero, suggesting a potential alignment in resource utilization."
     },
     {
         "page_number": 38,
@@ -212,7 +232,7 @@
     {
         "page_number": 39,
         "question": "What was the peak percentage change of the CPIF observed in the years 2021 and 2022?",
-        "answer": "The peak percentage change of the CPIF observed in the years 2021 and 2022 was around 10%."
+        "answer": "The peak percentage change of the CPIF observed in the years 2021 and 2022 was around 12%."
     },
     {
         "page_number": 40,
@@ -221,38 +241,53 @@
     },
     {
         "page_number": 41,
-        "question": "What was the highest nominal exchange rate index recorded between 2010 and 2028, and when did it occur?",
-        "answer": "The highest nominal exchange rate index recorded was approximately 135, occurring in between 2022 and 2025."
+        "question": "What is the expected rate of increase for the CPIF excluding energy over the next few months?",
+        "answer": "The expected rate of increase for the CPIF excluding energy remains at around 2 percent."
+    },
+    {
+        "page_number": 41,
+        "question": "What was the highest nominal exchange rate index recorded between 2010 and 2028, and in which year did it occur?",
+        "answer": "The highest nominal exchange rate index recorded was approximately 135, occurring in 2022."
     },
     {
         "page_number": 42,
-        "question": "What is the projected CPIF inflation rate at the start of 2025 under the scenario of higher energy prices?",
-        "answer": "In the scenario with higher energy prices, CPIF inflation is projected to be 2 percent at the start of 2025."
+        "question": "What is the projected CPIF inflation rate at the end of 2025 under the scenario of higher energy prices?",
+        "answer": "In the scenario with higher energy prices, CPIF inflation is projected to reach 3 percent at the start of 2025."
+    },
+    {
+        "page_number": 43,
+        "question": "What is the expected policy rate at the end of the forecast period mentioned in the text?",
+        "answer": "The expected policy rate at the end of the forecast period is 2.25 per cent."
+    },
+    {
+        "page_number": 43,
+        "question": "What trend can be observed in the inflationary pressure relative to economic activity over the selected time period?",
+        "answer": "The trend indicates a correlation between increasing inflationary pressure and rising economic activity."
     },
     {
         "page_number": 44,
         "question": "What was the peak inflation expectation percentage for money market agents over the 5-year period between 2020 and 2023?",
-        "answer": "The peak inflation expectation percentage for money market agents over the 5-year period was 4.5 percent."
+        "answer": "The peak inflation expectation percentage for money market agents over the 5-year period was 6 percent."
     },
     {
         "page_number": 44,
-        "question": "What was the peak value expected inflation by the blue line for All, and in which year did it occur?",
-        "answer": "The peak value reached by the blue line was 5, which occurred in 2022."
+        "question": "What was the peak value reached by the blue line in the right chart, and in which year did it occur?",
+        "answer": "The peak value reached by the blue line in the right chart was 5, which occurred in 2021."
     },
     {
         "page_number": 45,
         "question": "What is the projected policy rate in June 2025 according to the forecast?",
-        "answer": "Approximately 3 percent."
+        "answer": "Approximately 2 percent."
     },
     {
         "page_number": 47,
         "question": "What is the projected trend of the real policy rate from 2024 to 2026 according to the forecast?",
-        "answer": "The projected trend shows a decline in the real policy rate from 2024 to 2026."
+        "answer": "The projected trend shows a slight decline in the real policy rate from 2024 to 2026."
     },
     {
         "page_number": 48,
         "question": "What was the peak nominal amount of 'Säkerställda obligationer' held by the Riksbank, and in which year did it occur?",
-        "answer": "The peak nominal amount of 'Säkerställda obligationer' was approximately 800 SEK billion, occurring in the year 2021."
+        "answer": "The peak nominal amount of 'Säkerställda obligationer' was approximately 400 SEK billion, occurring in the year 2021."
     },
     {
         "page_number": 50,
@@ -267,7 +302,7 @@
     {
         "page_number": 53,
         "question": "What is the projected GDP index value in 2026 under the 'Higher inflation, faster price adjustment' scenario?",
-        "answer": "Approximately 107."
+        "answer": "Approximately 110."
     },
     {
         "page_number": 53,
@@ -277,11 +312,36 @@
     {
         "page_number": 54,
         "question": "What is the expected policy rate in the main scenario by the end of 2024?",
-        "answer": "Approximately 3 percent"
+        "answer": "Approximately 3.5 percent"
     },
     {
         "page_number": 55,
         "question": "How many policy rate adjustments were made that were less than 0.25 percentage points over the past 25 years?",
         "answer": "4 adjustments were made that were less than 0.25 percentage points."
+    },
+    {
+        "page_number": 56,
+        "question": "What are some reasons identified for the gradual adjustment of monetary policy rates?",
+        "answer": "Reasons include uncertainty regarding economic developments, the impact of long-term interest rates, a decrease in financial instability risk, and the desire of central bank decision-makers to avoid reversing monetary policy."
+    },
+    {
+        "page_number": 57,
+        "question": "What are the primary challenges mentioned in isolating the effects of monetary policy on the economy?",
+        "answer": "The primary challenges include the difficulty in separating cause and effect when studying developments in the macro economy and isolating the part of the developments that are specifically due to monetary policy."
+    },
+    {
+        "page_number": 58,
+        "question": "What is the maximum effect on GDP after a 1 percentage point increase in the policy rate according to the studies?",
+        "answer": "The maximum effect on GDP is largest after around 2 years, with the effect being 0.8 per cent in one study and 1.8 per cent in the other."
+    },
+    {
+        "page_number": 59,
+        "question": "What key factors should be considered when assessing the impact of monetary policy according to the analysis?",
+        "answer": "The analysis emphasizes the importance of weighing the results from different studies and models, as well as considering other types of information not included in the models to ensure the effects appear reasonable."
+    },
+    {
+        "page_number": 63,
+        "question": "What specific services does Sveriges Riksbank provide based on the contact information listed?",
+        "answer": "The chart includes contact information for Sveriges Riksbank, indicating services such as general inquiries through phone and email."
     }
 ]
