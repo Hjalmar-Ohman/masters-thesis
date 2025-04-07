@@ -89,8 +89,8 @@ def generate_qa_for_pdf(pdf_path, json_output_path, mode="per_image"):
             custom_prompt = (
                 "Your task is to generate a question that can be answered by analyzing the provided chart image. "
                 "Follow these rules:\n"
-                "1. The question must be specific to the data or trends visible in the chart.\n"
-                "2. Avoid generic questions; focus on insights or patterns in the chart.\n"
+                "1. The question must be specific to the data visible in the chart.\n"
+                "2. Avoid generic questions; focus on insights in the chart.\n"
                 "3. Ensure the question is answerable using only the chart image.\n"
                 "4. The question should be of moderate difficulty.\n"
                 "5. Avoid phrases like 'provided context' or 'in the chart'.\n"
