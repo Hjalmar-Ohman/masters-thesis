@@ -17,6 +17,7 @@ def generate_qa_for_pdf(pdf_path, json_output_path, mode="per_image"):
         pdf_path (str): Path to the PDF file.
         mode (str): "per_page" processes each page as an image,
                     "per_chunk" processes extracted text and images separately.
+                    "per_image" processes only images.
 
     Returns:
         str: Path to the generated JSON file containing the Q&A data.
@@ -164,3 +165,9 @@ def generate_chartQA_pdf_and_json(dataset, pdf_output_path='ChartQA_Evaluation_S
         json.dump(qa_list, json_file, indent=4)
 
     print(f'PDF saved as {pdf_output_path}')
+
+if __name__ == "__main__":
+    pdf_path = "knowledge/riksbanken.pdf"
+    json_output_path = "json_files/QA_riksbanken.json"
+    
+    generate_qa_for_pdf(pdf_path, json_output_path, mode="per_image")
