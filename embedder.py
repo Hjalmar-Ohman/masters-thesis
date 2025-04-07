@@ -57,12 +57,16 @@ class ColPaliEmbedder(MultimodalEmbedder):
             query_emb = self.model(**query_inputs)
         return query_emb
 
-    def embed_image(self, images):
-        image_inputs = self.processor.process_images(images).to(self.device)
-        with torch.no_grad():
-            image_emb = self.model(**image_inputs)
-        return image_emb
-
+    def embed_image(self, images, batch_size=2):  # Added batch_size parameter
+        embeddings = []
+        for i in range(0, len(images), batch_size):
+            batch = images[i:i + batch_size]
+            image_inputs = self.processor.process_images(batch).to(self.device)
+            with torch.no_grad():
+                image_emb = self.model(**image_inputs)
+            embeddings.append(image_emb)
+        return torch.cat(embeddings, dim=0)  # Concatenate all batch embeddings
+    
     def search(self, query, candidate_embeddings, top_k=5):
         query_embedding = self.embed_text([query])
         scores = self.processor.score_multi_vector(query_embedding, candidate_embeddings)
