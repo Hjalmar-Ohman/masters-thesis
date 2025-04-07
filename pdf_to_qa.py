@@ -19,24 +19,28 @@ def generate_qa_for_pdf(pdf_path, json_output_path, mode="per_image"):
                     "per_chunk" processes extracted text and images separately,
                     "per_image" processes only the images embedded in the PDF.
 
+
     Returns:
         str: Path to the generated JSON file containing the Q&A data.
     """
     qa_data = []
 
     # Function to generate Q&A from a given input (text or image)
-    def generate_qa(prompt_input, page_number):
+    def generate_qa(prompt_input, page_number, custom_prompt=None):
+        """Generates Q&A using a custom or default prompt."""
+        default_prompt = (
+            "Your task is to formulate a question from the given context while following these rules:\n"
+            "1. The question must be answerable using the provided context.\n"
+            "2. It should be based on non-trivial information.\n"
+            "3. The answer must not contain any links.\n"
+            "4. The question should be of moderate difficulty.\n"
+            "5. Avoid phrases like 'provided context'.\n"
+            "6. The response must be in valid JSON format as follows:\n"
+            r'{"question": "Generated question here", "answer": "Generated answer here"}'
+        )
+        prompt_text = custom_prompt if custom_prompt else default_prompt
         user_prompt = [
-            {"type": "text", "text": (
-                "Your task is to formulate a question from the given context while following these rules:\n"
-                "1. The question must be answerable using the provided context.\n"
-                "2. It should be based on non-trivial information.\n"
-                "3. The answer must not contain any links.\n"
-                "4. The question should be of moderate difficulty.\n"
-                "5. Avoid phrases like 'provided context'.\n"
-                "6. The response must be in valid JSON format as follows:\n"
-                r'{"question": "Generated question here", "answer": "Generated answer here"}'
-            )},
+            {"type": "text", "text": prompt_text},
             prompt_input
         ]
 
@@ -75,6 +79,31 @@ def generate_qa_for_pdf(pdf_path, json_output_path, mode="per_image"):
         for data in image_data:
             base64_str = encode_image_to_base64(data["pil_image"])
             generate_qa({"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64_str}"}}, data["page_number"])
+    
+    elif mode == "per_image":
+        # Extract images from PDF
+        image_data = extract_images_from_pdf(pdf_path)
+
+        for data in image_data:
+            base64_str = encode_image_to_base64(data["pil_image"])
+            custom_prompt = (
+                "Your task is to generate a question that can be answered by analyzing the provided chart image. "
+                "Follow these rules:\n"
+                "1. The question must be specific to the data or trends visible in the chart.\n"
+                "2. Avoid generic questions; focus on insights or patterns in the chart.\n"
+                "3. Ensure the question is answerable using only the chart image.\n"
+                "4. The question should be of moderate difficulty.\n"
+                "5. Avoid phrases like 'provided context' or 'in the chart'.\n"
+                "6. The question should not contain any links.\n"
+                "7. Generate only one question per image, avoid generating questions followed by 'and how does it compare to...'.\n"
+                "8. The response must be in valid JSON format as follows:\n"
+                r'{"question": "Generated question here", "answer": "Generated answer here"}'
+            )
+            image_input = {
+                "type": "image_url",
+                "image_url": {"url": f"data:image/png;base64,{base64_str}"}
+            }
+            generate_qa(image_input, data["page_number"], custom_prompt)
 
     elif mode == "per_image":
         # Only process images
@@ -86,6 +115,7 @@ def generate_qa_for_pdf(pdf_path, json_output_path, mode="per_image"):
 
     else:
         raise ValueError("Invalid mode. Use 'per_page', 'per_chunk', or 'per_image'.")
+
 
     # Save the cleaned Q&A data to JSON
     with open(json_output_path, 'w', encoding='utf-8') as f:
@@ -145,3 +175,9 @@ def generate_chartQA_pdf_and_json(dataset, pdf_output_path='ChartQA_Evaluation_S
         json.dump(qa_list, json_file, indent=4)
 
     print(f'PDF saved as {pdf_output_path}')
+
+if __name__ == "__main__":
+    pdf_path = "knowledge/riksbanken.pdf"
+    json_output_path = "json_files/QA_riksbanken.json"
+    
+    generate_qa_for_pdf(pdf_path, json_output_path, mode="per_image")

@@ -86,9 +86,14 @@ class OpenAIEmbedder(TextEmbedder):
     def search(self, query, candidate_embeddings, top_k=5):
         query_embedding = self.embed_text([query])
 
+
         # Convert to tensors
         query_embedding = torch.tensor(query_embedding)  # Shape: (1, d)
         candidate_embeddings = torch.tensor(candidate_embeddings)  # Shape: (N, d)
+
+        # Ensure both tensors are on the same device
+        device = candidate_embeddings.device  # Use the device of candidate_embeddings
+        query_embedding = query_embedding.to(device)
 
         # Compute similarity using dot product (since OpenAI embeddings are normalized)
         scores = query_embedding @ candidate_embeddings.T  # Shape: (1, N)
