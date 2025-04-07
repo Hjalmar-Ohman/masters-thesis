@@ -126,5 +126,17 @@ def evaluate_generation(rag_answers: List[dict], evaluator_llm):
     ]
 
     evaluation_dataset = EvaluationDataset.from_list(formatted_answers)
-    result = evaluate(dataset=evaluation_dataset, metrics=[MultiModalFaithfulness(), MultiModalRelevance(), AnswerCorrectness()], llm=evaluator_llm)
-    return result
+    result = evaluate(
+        dataset=evaluation_dataset, 
+        metrics=[MultiModalFaithfulness(), MultiModalRelevance(), AnswerCorrectness()], 
+        llm=evaluator_llm
+    )
+
+    # # Debug: Check result type
+    # print(f"Result type: {type(result)}")
+
+    # # If it's an object, check its attributes
+    # if hasattr(result, "__dict__"):
+    #     print(f"Result attributes: {result.__dict__.keys()}")
+
+    return result  # Returning raw result for debugging
