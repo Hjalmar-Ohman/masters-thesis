@@ -15,6 +15,7 @@ class DocumentProcessor(abc.ABC):
         self.faiss_index = None
         self.embeddings = None
         self.metadata: List[Dict[str, Any]] = []
+        self.name = self.__class__.__name__
 
     @abc.abstractmethod
     def process_pdf(self, pdf_file: str) -> None:
@@ -34,6 +35,7 @@ class DocumentProcessor(abc.ABC):
 class TextProcessor(DocumentProcessor):
     def __init__(self, embedder: TextEmbedder):
         super().__init__(embedder)
+        self.name = "TextProcessor"
 
     def process_pdf(self, pdf_file: str):
         text_chunks = chunk_text_from_pdf(pdf_file)
@@ -46,10 +48,11 @@ class TextProcessor(DocumentProcessor):
 
 
 class ImageProcessor(DocumentProcessor):
-    def __init__(self, embedder: MultimodalEmbedder, dataset: str, batch_size=4, ):
+    def __init__(self, embedder: MultimodalEmbedder, dataset: str, batch_size=4):
         super().__init__(embedder)
         self.batch_size = batch_size
         self.dataset = dataset
+        self.name = "ImageProcessor"
 
     def process_pdf(self, pdf_file: str):
         if self.dataset.upper() == "CHARTQA":
@@ -81,6 +84,7 @@ class PageImageProcessor(DocumentProcessor):
     def __init__(self, embedder: MultimodalEmbedder, dpi=200):
         super().__init__(embedder)
         self.dpi = dpi
+        self.name = "PageImageProcessor"
 
     def process_pdf(self, pdf_file: str):
         pages = convert_from_path(pdf_file, dpi=self.dpi)
@@ -93,6 +97,7 @@ class ImageTextualSummaryProcessor(DocumentProcessor):
     def __init__(self, embedder: TextEmbedder, dataset: str):
         super().__init__(embedder)
         self.dataset = dataset
+        self.name = "ImageTextualSummaryProcessor"
 
     def process_pdf(self, pdf_file: str):
         text_chunks = chunk_text_from_pdf(pdf_file)
