@@ -3,7 +3,7 @@ from pdf2image import convert_from_path
 
 import cv2
 import numpy as np
-from typing import List, Dict
+from typing import List, Dict, Optional
 import base64
 from io import BytesIO
 
@@ -76,6 +76,63 @@ def chunk_text_from_pdf(pdf_path: str, chunk_size_max: int = 512) -> List[Dict[s
                     start += 1
     return text_chunks
 
+def chunk_text_from_pdfLarge(pdf_path: str, chunk_size_max: int = 512, start_page: int = 0, end_page: Optional[int] = None) -> List[Dict[str, any]]:
+    """
+    Chunks text from a PDF file between specified pages.
+    Ensures sentence-level boundaries where possible.
+    
+    Args:
+        pdf_path (str): Path to the PDF.
+        chunk_size_max (int): Max tokens per chunk.
+        start_page (int): Start page index (0-based).
+        end_page (int): End page index (exclusive). If None, reads to end.
+    
+    Returns:
+        List[Dict[str, any]]: A list of text chunks with page metadata.
+    """
+    text_chunks = []
+    reader = PdfReader(pdf_path)
+
+    total_pages = len(reader.pages)
+    end_page = end_page if end_page is not None else total_pages
+
+    for page_i in range(start_page, end_page):
+        page = reader.pages[page_i]
+        page_text = page.extract_text()
+        if page_text and page_text.strip():
+            text = page_text.strip()
+            start = 0
+            while start < len(text):
+                low = start
+                high = len(text)
+                best = start
+                while low <= high:
+                    mid = (low + high) // 2
+                    candidate = text[start:mid]
+                    if num_tokens_from_string(candidate, "cl100k_base") <= chunk_size_max:
+                        best = mid
+                        low = mid + 1
+                    else:
+                        high = mid - 1
+
+                last_period = text.rfind(".", start, best)
+                if last_period != -1 and last_period > start:
+                    chunk_end = last_period + 1
+                else:
+                    chunk_end = best
+
+                chunk = text[start:chunk_end].strip()
+                if chunk:
+                    text_chunks.append({
+                        "text": chunk,
+                        "page_number": page_i + 1  # 1-based
+                    })
+
+                start = chunk_end
+                while start < len(text) and text[start].isspace():
+                    start += 1
+
+    return text_chunks
 
 def extract_images_from_pdf(pdf_path: str, padding: int = 300, xpadding: int = 300) -> List[Dict[str, any]]:
     """
@@ -168,37 +225,56 @@ def extract_images_from_pdf_unstructured(pdf_path: str) -> List[Dict[str, any]]:
     
     return images
 
-def extract_images_from_pdf_chartQA(pdf_path: str) -> List[Dict[str, any]]:
-    """
-    Extracts images from a PDF by screenshotting the entire PDF page.
-    Assumes there is only one image per PDF page.
+# def extract_images_from_pdf_chartQA(pdf_path: str) -> List[Dict[str, any]]:
+#     """
+#     Extracts images from a PDF by screenshotting the entire PDF page.
+#     Assumes there is only one image per PDF page.
 
-    Args:
-        pdf_path (str): The path to the PDF file.
+#     Args:
+#         pdf_path (str): The path to the PDF file.
 
-    Returns:
-        List[Dict[str, any]]: A list of dictionaries where each dictionary contains:
-            - "pil_image" (PIL.Image): Extracted image as a PIL object.
-            - "page_number" (int): The page number where the image was extracted.
-    """
+#     Returns:
+#         List[Dict[str, any]]: A list of dictionaries where each dictionary contains:
+#             - "pil_image" (PIL.Image): Extracted image as a PIL object.
+#             - "page_number" (int): The page number where the image was extracted.
+#     """
+#     images = []
+#     doc = fitz.open(pdf_path)
+
+#     for page_index in range(len(doc)):
+#         page = doc.load_page(page_index)
+#         pix = page.get_pixmap(dpi=300)  # Render the page at 300 DPI (high resolution)
+        
+#         # Convert to a PIL Image
+#         pil_image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+
+#         # Append the image and its page number to the list
+#         images.append({
+#             "pil_image": pil_image,
+#             "page_number": page_index + 1  # 1-based page number
+#         })
+
+#     doc.close()
+#     return images
+
+def extract_images_from_pdf_chartQA(pdf_path: str, start_page: int = 0, end_page: Optional[int] = None) -> List[Dict[str, any]]:
     images = []
     doc = fitz.open(pdf_path)
+    end_page = end_page or len(doc)
 
-    for page_index in range(len(doc)):
+    for page_index in range(start_page, end_page):
         page = doc.load_page(page_index)
-        pix = page.get_pixmap(dpi=300)  # Render the page at 300 DPI (high resolution)
-        
-        # Convert to a PIL Image
+        pix = page.get_pixmap(dpi=300)
         pil_image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
 
-        # Append the image and its page number to the list
         images.append({
             "pil_image": pil_image,
-            "page_number": page_index + 1  # 1-based page number
+            "page_number": page_index + 1
         })
 
     doc.close()
     return images
+
 
 # if __name__ == "__main__":
 #     # Extract text from a PDF
