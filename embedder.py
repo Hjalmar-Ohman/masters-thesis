@@ -91,10 +91,13 @@ class OpenAIEmbedder(TextEmbedder):
         query_embedding = self.embed_text([query])
 
 
-        # Convert to tensors
-        query_embedding = torch.tensor(query_embedding)  # Shape: (1, d)
-        candidate_embeddings = torch.tensor(candidate_embeddings)  # Shape: (N, d)
+        # Convert to tensors only if not already tensors
+        if not isinstance(query_embedding, torch.Tensor):
+            query_embedding = torch.as_tensor(query_embedding)  # Shape: (1, d)
 
+        if not isinstance(candidate_embeddings, torch.Tensor):
+            candidate_embeddings = torch.as_tensor(candidate_embeddings)  # Shape: (N, d)
+            
         # Ensure both tensors are on the same device
         device = candidate_embeddings.device  # Use the device of candidate_embeddings
         query_embedding = query_embedding.to(device)

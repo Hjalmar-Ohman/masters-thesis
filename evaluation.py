@@ -131,12 +131,26 @@ def evaluate_generation(rag_answers: List[dict], evaluator_llm):
         metrics=[MultiModalFaithfulness(), MultiModalRelevance(), AnswerCorrectness()], 
         llm=evaluator_llm
     )
+    return result  # Returning raw result for debugging
 
-    # # Debug: Check result type
-    # print(f"Result type: {type(result)}")
+def evaluate_generation_chartQA(rag_answers: List[dict], evaluator_llm):
+    formatted_answers = [
+        {
+            "user_input": entry["query"],
+            "retrieved_contexts": [entry["retrieved_contexts"][0]["content"]],
+            "response": entry["generated_answer"],
+            "reference": entry["true_answer"]
+        }
+        for entry in rag_answers
+    ]
+    
+    
 
-    # # If it's an object, check its attributes
-    # if hasattr(result, "__dict__"):
-    #     print(f"Result attributes: {result.__dict__.keys()}")
-
+    evaluation_dataset = EvaluationDataset.from_list(formatted_answers)
+    
+    result = evaluate(
+        dataset=evaluation_dataset, 
+        metrics=[MultiModalFaithfulness(), MultiModalRelevance(), AnswerCorrectness()], 
+        llm=evaluator_llm,
+    )
     return result  # Returning raw result for debugging

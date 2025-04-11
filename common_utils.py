@@ -4,6 +4,17 @@ import base64
 from openai import OpenAI
 from config import OPENAI_API_KEY
 
+import time
+from openai import RateLimitError
+
+def safe_call_gpt_4(user_prompt):
+    while True:
+        try:
+            return call_gpt_4(user_prompt)
+        except RateLimitError as e:
+            print("Rate limit hit. Sleeping for 40 seconds...")
+            time.sleep(40)
+
 def encode_image_to_base64(pil_image):
     """
     Encodes a PIL image to base64 (PNG by default).

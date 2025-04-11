@@ -3,7 +3,11 @@ import json
 import torch
 from document_processor import DocumentProcessor
 from typing import List, Dict, Any
-from common_utils import call_gpt_4
+from common_utils import call_gpt_4, safe_call_gpt_4
+import base64
+from typing import List, Dict, Any
+from PIL import Image
+from io import BytesIO
 
 class MultimodalRAG:
     """
@@ -61,7 +65,7 @@ class MultimodalRAG:
 
         sorted_results = sorted(all_results, key=lambda x: x["score"], reverse=True)
         return sorted_results[:top_k]
-
+    
     def generate_answer(self, query: str, relevant_docs: List[Dict[str, Any]]) -> str:
         user_content = [{"type": "text", "text": f"User query: {query}"}]
         
@@ -82,3 +86,26 @@ class MultimodalRAG:
                 raise ValueError(f"Unknown doc type: {doc['type']}")
         
         return call_gpt_4(user_content)
+    
+    def generate_answer_chartQA(self, query: str, relevant_docs: List[Dict[str, Any]]) -> str:
+        user_content = [{"type": "text", "text": f"User query: {query}"}]
+        
+        if relevant_docs:
+            doc = relevant_docs[0]  # Only use the first retrieved context
+            if doc["type"] == "text":
+                snippet = doc["content"][:500] + "..." if len(doc["content"]) > 500 else doc["content"]
+                user_content.append({
+                    "type": "text",
+                    "text": f"(page {doc['page_number']}) {snippet}"
+                })
+            elif doc["type"] in ["image", "page_image"]:
+                base64_str = doc["content"]
+                user_content.append({
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/png;base64,{base64_str}"}  # Corrected to use dictionary around "url"
+                })
+            else:
+                raise ValueError(f"Unknown doc type: {doc['type']}")
+        
+        # Call GPT-4 with the correct user content and a system prompt
+        return call_gpt_4(user_content, system_prompt="Answer only with a number, or 'yes' or 'no'. Do not answer in a sentence.")
