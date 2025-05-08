@@ -1,276 +1,276 @@
 [
     {
-        "page_number": 10.1,
+        "page_number": 10,
         "question": "What is the projected inflation rate for CPIF excluding energy in 2026?",
         "answer": "The projected inflation rate for CPIF excluding energy in 2026 is around 2%."
     },
     {
-        "page_number": 10.2,
+        "page_number": 10,
         "question": "What was the highest policy rate recorded between 2022 and 2023?",
         "answer": "The highest policy rate recorded was 4%"
     },
     {
-        "page_number": 10.3,
+        "page_number": 10,
         "question": "In what year did the highest recorded inflation rate occur?",
         "answer": "The highest recorded inflation rate occurred in the end of 2023 and beggining of 2024."
     },
     {
-        "page_number": 13.1,
+        "page_number": 13,
         "question": "What was the trend in household consumption from 2019 to 2024, and how did it change during the year 2020?",
         "answer": "Household consumption showed a significant dip in 2020, followed by a gradual recovery and an overall upward trend from 2021 to 2024."
     },
     {
-        "page_number": 13.2,
+        "page_number": 13,
         "question": "How does Sweden's GDP growth trend compare to that of the Euro area from 2019 to 2024?",
         "answer": "Sweden's GDP shows a more consistent upward trend compared to the Euro area's fluctuations, particularly after the initial decline in 2020."
     },
     {
-        "page_number": 14.1,
+        "page_number": 14,
         "question": "What was the highest recorded index value for the manufacturing sector in 2022?",
         "answer": "The highest recorded index value for the manufacturing sector in 2022 was approximately 60."
     },
     {
-        "page_number": 14.2,
+        "page_number": 14,
         "question": "What was the trend of the purchasing managers' index for Sweden from 2022 to 2024?",
         "answer": "The purchasing managers' index for Sweden showed a general decline from 2022 to 2024, fluctuating around the 50 mark, indicating a period of uncertainty and potential contraction."
     },
     {
-        "page_number": 15.1,
+        "page_number": 15,
         "question": "What was the employment rate trend for the population aged 16 and older in the United States from 2019 to 2024?",
         "answer": "The employment rate showed a decline in 2020, followed by a gradual recovery, stabilizing around 60% by 2024."
     },
     {
-        "page_number": 15.2,
+        "page_number": 15,
         "question": "What was the peak unemployment rate in Sweden during the observed period?",
         "answer": "The peak unemployment rate in Sweden during the observed period was approximately 10%."
     },
     {
-        "page_number": 16.1,
+        "page_number": 16,
         "question": "What was the trend in service prices for the euro area from 2020 to 2023?",
         "answer": "Service prices for the euro area generally increased from 2020 to 2022, peaking in mid-2023."
     },
     {
-        "page_number": 16.2,
+        "page_number": 16,
         "question": "What was the highest annual percentage change in goods prices recorded for Sweden between 2019 and 2024?",
         "answer": "The highest annual percentage change in goods prices recorded for Sweden was approximately 9% in 2022."
     },
     {
-        "page_number": 16.3,
+        "page_number": 16,
         "question": "What was the peak consumer price index (CPI) value for the euro area between 2019 and 2024?",
         "answer": "The peak consumer price index (CPI) value for the euro area occurred in 2022, reaching approximately 11."
     },
     {
-        "page_number": 16.4,
+        "page_number": 16,
         "question": "What was the peak annual percentage change in consumer prices excluding energy for Sweden, and in which year did it occur?",
         "answer": "The peak annual percentage change in consumer prices for Sweden was approximately 9% in 2022."
     },
     {
-        "page_number": 17.1,
+        "page_number": 17,
         "question": "Which central bank has the highest policy rate by the end of 2024?",
         "answer": "The Bank of England has the highest policy rate by the end of 2024."
     },
     {
-        "page_number": 18.1,
+        "page_number": 18,
         "question": "What is the expected policy rate for the Euro area in 2025?",
         "answer": "The expected policy rate for the Euro area in 2025 is approximately 2 percent."
     },
     {
-        "page_number": 19.1,
+        "page_number": 19,
         "question": "What was the trend of the 2-year government bond yield for Sweden from January to September 2024?",
         "answer": "The 2-year government bond yield for Sweden showed a decreasing trend from January to September 2024."
     },
     {
-        "page_number": 19.2,
+        "page_number": 19,
         "question": "What was the trend of the OMX Stockholm index compared to the S&P500 from January to September 2024?",
         "answer": "The OMX Stockholm index showed a generally upward trend, consistently higher than the S&P500, especially notable from March to September 2024."
     },
     {
-        "page_number": 20.1,
+        "page_number": 20,
         "question": "What was the trend in deposit rates for non-financial companies from 2020 to 2024?",
         "answer": "The deposit rates for non-financial companies showed a gradual increase from 2020, stabilizing around 2% in 2024."
     },
     {
-        "page_number": 20.2,
+        "page_number": 20,
         "question": "What trend is observed in the lending rate for new loans from 2020 to 2024?",
         "answer": "The lending rate for new loans has generally increased from around 1% in 2020 to approximately 5% by 2024."
     },
     {
-        "page_number": 21.1,
+        "page_number": 21,
         "question": "What is the average mortgage rate for loans with a term greater than 5 years in mid-2024?",
         "answer": "Approximately 2.5%."
     },
     {
-        "page_number": 22.1,
+        "page_number": 22,
         "question": "In what year did loans from MFIs peak?",
         "answer": "Loans from MFIs peaked around 2023."
     },
     {
-        "page_number": 22.2,
+        "page_number": 22,
         "question": "What was the peak annual percentage change for tenant-owned apartments from 2014 to 2024?",
         "answer": "The peak annual percentage change for tenant-owned apartments was 14%."
     },
     {
-        "page_number": 23.1,
+        "page_number": 23,
         "question": "What was the highest value of KIX4 observed between January and September 2024, and in which month did it occur?",
         "answer": "The highest value of KIX4 observed was 106, which occurred in August 2024."
     },
     {
-        "page_number": 23.2,
+        "page_number": 23,
         "question": "What was the highest nominal exchange rate index for NOK per USD in the first half of 2024?",
         "answer": "The highest nominal exchange rate index for NOK per USD in the first half of 2024 was approximately 108."
     },
     {
-        "page_number": 24.1,
+        "page_number": 24,
         "question": "What was the peak household savings ratio percentage recorded between 2015 and 2024, and in which year did it occur?",
         "answer": "The peak household savings ratio percentage recorded was approximately 17.5% in the year 2020."
     },
     {
-        "page_number": 25.1,
+        "page_number": 25,
         "question": "In which year did the demand in the business sector show the most significant decline compared to the RU indicator?",
         "answer": "The the demand in the business sector showed the most significant decline compared to RU indicator in 2020."
     },
     {
-        "page_number": 25.2,
+        "page_number": 25,
         "question": "What was the highest recorded GDP gap between 2005 and 2025, and in which year did it occur?",
         "answer": "The highest recorded GDP gap was approximately 5%, occurring in 2007."
     },
     {
-        "page_number": 27.1,
+        "page_number": 27,
         "question": "What trend can be observed in the CPIF excluding energy (PRISMA) from 2020 to 2024?",
         "answer": "From 2020 to 2024, the CPIF excluding energy shows a significant peak in price changes in 2023, followed by a decline towards 2024."
     },
     {
-        "page_number": 28.1,
+        "page_number": 28,
         "question": "What was the trend in the annual percentage change for the CPIF excluding energy 12-month period from 2023 to 2024?",
         "answer": "The trend shows a decline in the annual percentage from 2023 and continuing downward into 2024."
     },
     {
-        "page_number": 29.1,
+        "page_number": 29,
         "question": "What was the peak annual percentage change for CPIF excluding energy in 2022?",
         "answer": "The peak annual percentage change for CPIF excluding energy in 2022 was approximately 10%."
     },
     {
-        "page_number": 29.2,
+        "page_number": 29,
         "question": "What was the peak annualized three-month moving change in median value for underlying inflation and in which year did it occur?",
         "answer": "The peak annualized three-month moving change in median value for underlying inflation recorded in was approximately 10, occurring in 2022."
     },
     {
-        "page_number": 30.1,
+        "page_number": 30,
         "question": "What was the highest inflation expectation for 1-year estimates, and in which year did it occur?",
         "answer": "The highest inflation expectation for 1-year estimates was approximately 6% in 2022."
     },
     {
-        "page_number": 30.2,
+        "page_number": 30,
         "question": "What was the highest net figure recorded for the retail trade from 2019 to 2024, and in which year did it occur?",
         "answer": "The highest net figure recorded for the retail trade was approximately 80 in the year 2022."
     },
     {
-        "page_number": 31.1,
+        "page_number": 31,
         "question": "What was the lowest annual percentage change in real wages (CPI) recorded between 2010 and 2026?",
         "answer": "The highest annual percentage change in real wages (CPI) recorded was approximately -9%."
     },
     {
-        "page_number": 34.1,
+        "page_number": 34,
         "question": "What was the GDP index value in September 2023 compared to June 2023?",
         "answer": "The GDP index value in September 2023 was about the same as in June 2023"
     },
     {
-        "page_number": 34.2,
+        "page_number": 34,
         "question": "What is the projected household consumption level in Sweden for the year 2025 according to the dashed line?",
         "answer": "Approximately 105."
     },
     {
-        "page_number": 35.1,
+        "page_number": 35,
         "question": "What was the contribution of household consumption to GDP in 2021 compared to 2022?",
         "answer": "In 2021, the contribution of household consumption to GDP was approximately 2.5 percentage points, while in 2022, it decreased to around 1.5 percentage points."
     },
     {
-        "page_number": 36.1,
+        "page_number": 36,
         "question": "What was the peak unemployment rate observed between 2010 and 2025?",
         "answer": "The peak unemployment rate observed between 2010 and 2025 was approximately 9.5%."
     },
     {
-        "page_number": 36.2,
+        "page_number": 36,
         "question": "What is the projected employment rate for June in 2025 according to the forecast?",
         "answer": "The projected employment rate for June in 2025 is approximately 69%."
     },
     {
-        "page_number": 38.1,
+        "page_number": 38,
         "question": "What trend is observed in real disposable income per capita from 2022 to 2028?",
         "answer": "Real disposable income per capita shows a steady increase from 2022 to 2028."
     },
     {
-        "page_number": 39.1,
+        "page_number": 39,
         "question": "What was the peak percentage change of the CPIF observed in the years 2021 and 2022?",
         "answer": "The peak percentage change of the CPIF observed in the years 2021 and 2022 was around 10%."
     },
     {
-        "page_number": 40.1,
+        "page_number": 40,
         "question": "What was the peak annual percentage change for CPIF in 2022 according to the chart?",
         "answer": "The peak annual percentage change for CPIF in 2022 was approximately 12%."
     },
     {
-        "page_number": 41.1,
+        "page_number": 41,
         "question": "What was the highest nominal exchange rate index recorded between 2010 and 2028, and when did it occur?",
         "answer": "The highest nominal exchange rate index recorded was approximately 135, occurring in between 2022 and 2025."
     },
     {
-        "page_number": 42.1,
+        "page_number": 42,
         "question": "What is the projected CPIF inflation rate at the start of 2025 under the scenario of higher energy prices?",
         "answer": "In the scenario with higher energy prices, CPIF inflation is projected to be 2 percent at the start of 2025."
     },
     {
-        "page_number": 44.1,
+        "page_number": 44,
         "question": "What was the peak inflation expectation percentage for money market agents over the 5-year period between 2020 and 2023?",
         "answer": "The peak inflation expectation percentage for money market agents over the 5-year period was 4.5 percent."
     },
     {
-        "page_number": 44.2,
+        "page_number": 44,
         "question": "What was the peak value expected inflation by the blue line for All, and in which year did it occur?",
         "answer": "The peak value reached by the blue line was 5, which occurred in 2022."
     },
     {
-        "page_number": 45.1,
+        "page_number": 45,
         "question": "What is the projected policy rate in June 2025 according to the forecast?",
         "answer": "Approximately 3 percent."
     },
     {
-        "page_number": 47.1,
+        "page_number": 47,
         "question": "What is the projected trend of the real policy rate from 2024 to 2026 according to the forecast?",
         "answer": "The projected trend shows a decline in the real policy rate from 2024 to 2026."
     },
     {
-        "page_number": 48.1,
+        "page_number": 48,
         "question": "What was the peak nominal amount of 'Säkerställda obligationer' held by the Riksbank, and in which year did it occur?",
         "answer": "The peak nominal amount of 'Säkerställda obligationer' was approximately 800 SEK billion, occurring in the year 2021."
     },
     {
-        "page_number": 50.1,
+        "page_number": 50,
         "question": "What trend is observed in federal debt from 2000 to 2025?",
         "answer": "Federal debt has shown a consistent upward trend, increasing significantly over the years."
     },
     {
-        "page_number": 50.2,
+        "page_number": 50,
         "question": "What was the federal budget balance as a percentage of GDP in the year 2020?",
         "answer": "-15.0"
     },
     {
-        "page_number": 53.1,
+        "page_number": 53,
         "question": "What is the projected GDP index value in 2026 under the 'Higher inflation, faster price adjustment' scenario?",
         "answer": "Approximately 107."
     },
     {
-        "page_number": 53.2,
+        "page_number": 53,
         "question": "What is the projected annual percentage change in CPIF for the year 2025 according to the main scenario?",
         "answer": "Approximately 2%."
     },
     {
-        "page_number": 54.1,
+        "page_number": 54,
         "question": "What is the expected policy rate in the main scenario by the end of 2024?",
         "answer": "Approximately 3 percent"
     },
     {
-        "page_number": 55.1,
+        "page_number": 55,
         "question": "How many policy rate adjustments were made that were less than 0.25 percentage points over the past 25 years?",
         "answer": "4 adjustments were made that were less than 0.25 percentage points."
     }

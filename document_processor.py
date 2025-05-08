@@ -11,6 +11,8 @@ from common_utils import encode_image_to_base64, call_gpt_4
 from embedder import MultimodalEmbedder, TextEmbedder
 import fitz  # PyMuPDF
 
+
+
 class DocumentProcessor(abc.ABC):
     def __init__(self, embedder):
         self.embedder = embedder
@@ -65,10 +67,21 @@ class ImageProcessor(DocumentProcessor):
  
         pil_images_list = [info["pil_image"] for info in image_data]
 
-        self.metadata = [
-            {"type": "image", "content": encode_image_to_base64(info["pil_image"]), "page_number": info["page_number"]}
-            for info in image_data
-        ]
+        image_page_counter = {}
+
+        self.metadata = []
+        for info in image_data:
+            page_number = info["page_number"]
+            if page_number not in image_page_counter:
+                image_page_counter[page_number] = 1
+            else:
+                image_page_counter[page_number] += 1
+
+            self.metadata.append({
+            "type": "image",
+            "content": encode_image_to_base64(info["pil_image"]),
+            "page_number": f"{page_number}.{image_page_counter[page_number]}"
+            })
 
         # **Batching Logic**
         all_embeddings = []
@@ -155,32 +168,7 @@ class ImageTextualSummaryProcessor(DocumentProcessor):
 
         image_summaries = []
         chart_summary_prompt = """
-        You are given an image. First, determine if the image is a chart (e.g., line chart, bar chart, scatter plot, pie chart, etc.).
-
-        If it IS a chart, generate a concise and informative textual summary to maximize its utility for information retrieval. 
-        Extract and describe the following components explicitly, if available:
-
-        - Chart Title
-        - X-Axis Label and Ticks
-        - Y-Axis Label and Ticks
-        - Legend and Category Labels
-        - Notable Trends or Anomalies
-        - Data Type (e.g., line chart, bar chart, scatter plot, etc.)
-
-        Use this format:
-
-        Chart Title: [Title]
-        Chart Type: [e.g., Line Chart]
-        X-Axis: [Label] | Ticks: [list of major tick values or categories]
-        Y-Axis: [Label] | Ticks: [list of major tick values]
-        Legend: [List of legend labels or categories]
-        Summary: [Brief description of the trend, key data points, or insight in the chart]
-
-        If a component is not present or illegible, note it as [Not Available].
-
-        ---
-
-        If it is NOT a chart, provide a general summary of the image that is useful for information retrieval. Focus on key visual elements, objects, text, or layout that best describe the image content and context.
+        Summarize the above image in plain text.
         """
 
         for b64_str in base64_images_list:
@@ -195,10 +183,30 @@ class ImageTextualSummaryProcessor(DocumentProcessor):
         self.embeddings = self.embedder.embed_text(all_texts)
 
         self.metadata = []
+        text_page_counter = {}
+        image_page_counter = {}
+
         for td in text_chunks:
-            self.metadata.append({"type": "text", "content": td["text"], "page_number": td["page_number"]})
-        for i, img_info in enumerate(image_data):
-            self.metadata.append({"type": "image", "content": base64_images_list[i], "page_number": img_info["page_number"]})
+            page_number = td["page_number"]
+
+            self.metadata.append({
+            "type": "text",
+            "content": td["text"],
+            "page_number": page_number
+            })
+
+        for img_info in image_data:
+            page_number = img_info["page_number"]
+            if page_number not in image_page_counter:
+                image_page_counter[page_number] = 1
+            else:
+                image_page_counter[page_number] += 1
+
+            self.metadata.append({
+            "type": "image",
+            "content": base64_images_list[image_page_counter[page_number] - 1],
+            "page_number": f"{page_number}.{image_page_counter[page_number]}"
+            })
 
 
 class ImageTextualSummaryProcessorLarge(DocumentProcessor):
